@@ -1,0 +1,15 @@
+SET(TARGET_SRC
+    unitTest_main.cpp
+    LRETest.cpp
+)
+
+SET(TARGET_COMMON_LIBRARIES
+	gtest
+	LRE
+)
+
+SET(TARGET_LIBRARIES_VARS ${TARGET_LIBRARIES_VARS}
+#none
+)
+
+SETUP_TEST(lre)
