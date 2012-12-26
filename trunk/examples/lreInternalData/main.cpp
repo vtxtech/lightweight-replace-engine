@@ -1,5 +1,5 @@
 /*
-* Lightweight Replace Engine - Application
+* Lightweight Replace Engine - Example for build-in data
 * Copyright (C) 2012-2013 Johannes Scholz. All rights reserved.
 */
 
