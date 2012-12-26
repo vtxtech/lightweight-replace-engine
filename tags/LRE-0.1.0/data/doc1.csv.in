@@ -1,0 +1,5 @@
+This is a list of the available commands:
+Name;Englisch description;German description
+<LRE:COMPONENT:Command><LRE:KEY:name>;<LRE:KEY:description_en>;<LRE:KEY:description_de></LRE:COMPONENT:Command>
+Username=Password
+<LRE:COMPONENT:Users><LRE:KEY:name>=<LRE:KEY:password></LRE:COMPONENT:Users>
