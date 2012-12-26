@@ -1,9 +1,6 @@
-SET(LIB_NAME LRE)
-
-#######################################
-# Library files
-#######################################
-#FIND_PACKAGE( SomePackage REQUIRED )
+SET(TARGET_TARGETNAME
+    LRE
+)
 
 #######################################
 # Solution definition
@@ -34,9 +31,9 @@ SET(EXTERN_SRC
 SOURCE_GROUP("External" FILES ${EXTERN_SRC})
 SOURCE_GROUP("LRE" FILES ${TARGET_H} ${TARGET_SRC})
 
-SET(TARGET_TARGETNAME
-    ${LIB_NAME}
-)
+#######################################
+# Build target
+#######################################
 
 ADD_LIBRARY(${TARGET_TARGETNAME} 
     ${LRE_USER_DEFINED_DYNAMIC_OR_STATIC}
@@ -44,12 +41,6 @@ ADD_LIBRARY(${TARGET_TARGETNAME}
     ${EXTERN_SRC}
 )
 
-LINK_WITH_VARIABLES(
-    ${TARGET_TARGETNAME}
-#none
-)
-
-#LINK_EXTERNAL(${TARGET_TARGETNAME} ${OPENGL_LIBRARIES}) 
+SET_TARGET_PROPERTIES(${TARGET_TARGETNAME} PROPERTIES PROJECT_LABEL "${LRE_USER_DEFINED_DYNAMIC_OR_STATIC} Library ${TARGET_TARGETNAME}")
  
 INCLUDE(ModuleInstall OPTIONAL)
-
