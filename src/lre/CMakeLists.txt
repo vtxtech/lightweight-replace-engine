@@ -4,16 +4,20 @@ SET(TARGET_TARGETNAME
 SET(LIB_NAME
 	${TARGET_TARGETNAME}
 )
-# Output name will be LRE.dll/LREd.dll (LRE.so/LREd.so on Linux'es)
+# Output name will be lre.dll/LREd.dll (lre.so/LREd.so on Linux'es)
 # A different target name is used to avoid conflicts to lre.exe
 SET(LIB_OUTPUT_NAME
-	LRE
+	lre
 )
 
 #######################################
 # Solution definition
 #######################################
-ADD_DEFINITIONS(-DLRE_LIBRARY)
+IF(BUILD_SHARED_LIBS)
+	ADD_DEFINITIONS(-DLRE_LIBRARY)
+ELSE(BUILD_SHARED_LIBS)
+	ADD_DEFINITIONS(-DSTATIC_LRE_LIBRARIES)
+ENDIF(BUILD_SHARED_LIBS)
 
 SET(TARGET_SRC
 	ArgumentParser.cpp
