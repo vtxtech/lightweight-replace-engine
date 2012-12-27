@@ -48,6 +48,10 @@ namespace lre {
 			// @param path Path to a directory for writing the resulting files. 
 			void setOutputDirectory(const std::string& path) { outputPath_ = path; }
 
+			// Sets the data path. Only required if no lre::Components are defined inside your source code
+			// @param path Path to a directory where out-of-source data is defined
+			void setDataDirectory(const std::string& path) { dataPath_ = path; }
+
 			// Sets the input path recursive mode. Only valid if setInput is set to a path. Default is false.
 			// @param recurse Enable recursive handling of any files matching the extension inside the input directory
 			void setRecursive(bool recurse) { recursive_ = recurse; }
@@ -87,6 +91,7 @@ namespace lre {
 			std::string inputPath_;
 			std::string outputPath_;
 			std::string pattern_;
+			std::string dataPath_;
 
 			// Get a component by its name.
 			// @return Component* if found, otherwise NULL
