@@ -36,10 +36,7 @@ ENDIF(BUILD_SHARED_LIBS)
 
 OPTION(LRE_BUILD_EXAMPLES "Set to ON to build LRE examples." ON)
 OPTION(LRE_BUILD_TESTS "Set to ON to build LRE tests." ON)
-#OPTION(LRE_INSTALL_DATA "Set to ON to install LRE data." ON)
-#SET(LRE_DATA_INSTALLDIR $ENV{OSG_FILE_PATH} CACHE PATH "Path where to install LRE data")
-SET(LRE_EXAMPLES_INSTALLDIR "${CMAKE_INSTALL_PREFIX}/share/LRE/bin" CACHE PATH "Path where to install examples")
-SET(LRE_TESTS_INSTALLDIR "${CMAKE_INSTALL_PREFIX}/share/LRE/bin" CACHE PATH "Path where to install examples")
+SET(LRE_SHARE_INSTALLDIR "${CMAKE_INSTALL_PREFIX}/share/LRE/bin" CACHE PATH "Path where to install examples and tests")
 
 INCLUDE_DIRECTORIES(BEFORE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -53,12 +50,14 @@ IF(LRE_BUILD_EXAMPLES)
 ENDIF(LRE_BUILD_EXAMPLES)
 
 IF(LRE_BUILD_TESTS)
-#	FIND_PACKAGE( GTest ) # not required -> source included
 	OPTION(LRE_INSTALL_TESTS "Set to ON to install LRE examples." ON)
 	ADD_SUBDIRECTORY(test)
 ENDIF(LRE_BUILD_TESTS)
 
-#ADD_SUBDIRECTORY(data)
+# Both examples and tests require the data to be installed
+IF(LRE_INSTALL_EXAMPLES OR LRE_INSTALL_TESTS)
+	ADD_SUBDIRECTORY(data)
+ENDIF(LRE_INSTALL_EXAMPLES OR LRE_INSTALL_TESTS)
 
 ################################################################################
 ### uninstall target
