@@ -18,9 +18,14 @@ int main(int argc, char** argv)
 	// Create a ReplaceEngine to do the job
 	lre::ReplaceEngine re;
 	
-	// Handle command line arguments, report error, display some help
-	int result = re.init(argc, argv);
-	if (result != 0) { return result; }
+	// Ignore any command line arguments
+	// we setup everything manually here.
+	re.setInput("../data");
+	re.setOutputDirectory("./generated");
+	re.setRecursive(true);
+	re.setRemoveExtension(true);
+	re.setFilePattern("*.in");
+	//re.setDataDirectory is not required because the data to be used is following now:
 
 	// Add the data for file generation here
 	lre::Component* cmd = re.addComponent("Command");
