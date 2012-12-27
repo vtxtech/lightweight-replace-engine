@@ -71,6 +71,8 @@ cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
 cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
+INSTALL(TARGETS "gtest" RUNTIME DESTINATION ${LRE_SHARE_INSTALLDIR} )
+
 ########################################################################
 #
 # Samples on how to link user tests with gtest or gtest_main.

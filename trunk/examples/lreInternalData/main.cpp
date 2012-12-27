@@ -1,5 +1,5 @@
 /*
- * Lightweight Replace Engine - Example for build-in data
+ * Lightweight Replace Engine - Example for built-in data
  * Copyright (C) 2012-2013 Johannes Scholz. All rights reserved.
  *
  * This file is licensed under the GNU Lesser General Public License 3 (LGPLv3),
@@ -25,7 +25,9 @@ int main(int argc, char** argv)
 	re.setRecursive(true);
 	re.setRemoveExtension(true);
 	re.setFilePattern("*.in");
-	//re.setDataDirectory is not required because the data to be used is following now:
+	
+	// *re.setDataDirectory(...)* is not required because
+	// the data used for replacing is following now:
 
 	// Add the data for file generation here
 	lre::Component* cmd = re.addComponent("Command");
