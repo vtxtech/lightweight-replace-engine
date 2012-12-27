@@ -52,6 +52,11 @@ namespace lre {
 			// @param path Path to a directory where out-of-source data is defined
 			void setDataDirectory(const std::string& path) { dataPath_ = path; }
 
+			// Sets the data file pattern. Only files matching the pattern are parsed to read replacement data
+			// Wildcards (* and ?) are allowed. Only required if no lre::Components are defined inside your source code
+			// @param pattern The file pattern (e.g. extension) to be processed. Default is '*.lre'
+			void setDataPattern(const std::string& pattern) { dataPattern_ = pattern; }
+
 			// Sets the input path recursive mode. Only valid if setInput is set to a path. Default is false.
 			// @param recurse Enable recursive handling of any files matching the extension inside the input directory
 			void setRecursive(bool recurse) { recursive_ = recurse; }
@@ -60,8 +65,8 @@ namespace lre {
 			// @param keepStructure Keep subfolder structure in output directory
 			void setKeepSubFolders(bool keepStructure) { keepStructure_ = keepStructure; }
 
-			// Sets the file pattern to process if setInput is set to a path. Default is '*.in'. Wildcards (* and ?) are allowed.
-			// @param pattern The file pattern (e.g. extension) to be processed
+			// Sets the file pattern to process if setInput is set to a path. Wildcards (* and ?) are allowed.
+			// @param pattern The file pattern (e.g. extension) to be processed Default is '*.in'
 			void setFilePattern(const std::string& pattern) { pattern_ = pattern; }
 
 			// Define whether the extension should be removed from the target filenames
@@ -92,6 +97,7 @@ namespace lre {
 			std::string outputPath_;
 			std::string pattern_;
 			std::string dataPath_;
+			std::string dataPattern_;
 
 			// Get a component by its name.
 			// @return Component* if found, otherwise NULL

@@ -18,28 +18,17 @@ int main(int argc, char** argv)
 	// Create a ReplaceEngine to do the job
 	lre::ReplaceEngine re;
 	
-	// Handle command line arguments, report error, display some help
-	int result = re.init(argc, argv);
-	if (result != 0) { return result; }
-
-	// Add the data for file generation here
-	lre::Component* cmd = re.addComponent("Command");
-	lre::Set* set1 = cmd->addSet();
-	set1->addPair("name", "import");
-	set1->addPair("description_en", "Imports a geometry file");
-	set1->addPair("description_de", "Importiert eine Geometriedatei");
-	lre::Set* set2 = cmd->addSet();
-	set2->addPair("name", "exit");
-	set2->addPair("description_en", "Exits application");
-	set2->addPair("description_de", "Beendet die Anwendung");
-
-	lre::Component* users = re.addComponent("Users");
-	lre::Set* set11 = users->addSet();
-	set11->addPair("name", "admin");
-	set11->addPair("password", "abc123");
-	lre::Set* set12 = users->addSet();
-	set12->addPair("name", "user1");
-	set12->addPair("password", "dummy");
+	// Ignore any command line arguments
+	// we setup everything manually here.
+	re.setInput("../data");
+	re.setOutputDirectory("./generated");
+	re.setRecursive(true);
+	re.setRemoveExtension(true);
+	re.setFilePattern("*.in");
+	
+	// Define where to find our replacement data (lre::Component and lre::Set)
+	re.setDataDirectory("../data/data-multifile");
+	re.setDataPattern("*.lre");
 
 	// Finally to the work
 	return re.run();
