@@ -21,7 +21,7 @@
 namespace lre {
 
 	//=======================================================================================
-	ReplaceEngine::ReplaceEngine(): recursive_(false), inputPath_(""), outputPath_(""), pattern_("*.in"), removeExtension_(true), keepStructure_(true)
+	ReplaceEngine::ReplaceEngine(): recursive_(false), inputPath_(""), outputPath_(""), pattern_("*.in"), removeExtension_(true), keepStructure_(true), dataPath_("")
 	{
 	}
 
@@ -40,10 +40,11 @@ namespace lre {
 
 		ap.addCommandLineOption("--recursive or --R", "Enables input path recursive mode. Only valid if --input is set to a path. Disabled by default.");
 		ap.addCommandLineOption("--keepExtension or -K", "Define whether the extension should be kept in the target filenames. Usually the last extension in the input file name is removed. Remove extensions only if your files are 'myfile.txt.in' format.");
-		ap.addCommandLineOption("--pattern <pat>", "Sets the file pattern to match if --input is set to a path. Default is '*.in'. Allowed wildcards: * and ?");
-		ap.addCommandLineOption("--input <path or filename>", "Sets the input path or filename.");
-		ap.addCommandLineOption("--output <path>", "Sets the output path.");
+		ap.addCommandLineOption("--pattern <path>", "Sets the file pattern to match if --input is set to a path. Default is '*.in'. Allowed wildcards: * and ?");
+		ap.addCommandLineOption("--input <path or filename>", "Sets the input path or filename. Required option.");
+		ap.addCommandLineOption("--output <path>", "Sets the output path. Required option.");
 		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
+		ap.addCommandLineOption("--data <path>", "Remove recursive directory structure in output directory. Empty by default. Required option, if no data is defined in source code, only.");
 
 		if (ap.getArgumentCount() <= 1 || ap.isSet("--help") || ap.isSet("-h") || ap.isSet("/?") || ap.isSet("-?")) {
 			ap.reportOptions();
@@ -65,6 +66,7 @@ namespace lre {
 		ap.read("--pattern", pattern_);
 		ap.read("--input", inputPath_);
 		ap.read("--output", outputPath_);
+		ap.read("--data", dataPath_);
 
 		return 0;
 	}
@@ -84,9 +86,11 @@ namespace lre {
 		if (outputPath_ == "") { std::cout<<"FATAL: Output path is undefined"<<std::endl; return 1; }
 		if (removeExtension_ && pattern_ == "") { std::cout<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return 1; }
 		if (inputPath_ == outputPath_ && !removeExtension_) { std::cout<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return 1; }
-		
+		if (componentList_.size() == 0 && dataPath_ == "") { std::cout<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return 1; }
+
 		outputPath_ = FileUtil::excludeTrailingSeparator(outputPath_);
 		inputPath_ = FileUtil::excludeTrailingSeparator(inputPath_);
+		dataPath_ = FileUtil::excludeTrailingSeparator(dataPath_);
 
 		// Report input data for std::cout
 		reportSetup();
@@ -254,6 +258,7 @@ namespace lre {
 		std::cout<<"Remove extensions: "<<removeExtension_<<std::endl;
 		std::cout<<"Input path: "<<inputPath_<<std::endl;
 		std::cout<<"Output directory: "<<outputPath_<<std::endl;
+		std::cout<<"Data directory: "<<dataPath_<<std::endl;
 		std::cout<<"Keep directory structure: "<<keepStructure_<<std::endl;
 		std::cout<<"Extension match: "<<pattern_<<std::endl;
 		std::cout<<"--- Data ---"<<std::endl;
