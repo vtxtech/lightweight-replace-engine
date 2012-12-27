@@ -11,6 +11,9 @@
  * OpenSceneGraph Public License for more details.
 */
 
+// This is a stripped down version of the original OSG file
+// to be used in Lightweight Replace Engine
+
 // handle TCHAR type on various platforms
 // #ifndef is inspired by https://svn.apache.org/repos/asf/logging/log4cxx/tags/v0_9_4/include/log4cxx/helpers/tchar.h
 // defining type as plain char is from unzip.h, line 64

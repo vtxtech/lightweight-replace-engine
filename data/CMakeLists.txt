@@ -1,1 +1,17 @@
-# Empty file
+SET(DATA_PATH ${CMAKE_SOURCE_DIR}/Data)
+
+SET(DATA_FILES
+	${DATA_PATH}/doc1.csv.in
+	${DATA_PATH}/lre.bat
+	${DATA_PATH}/test.csv
+)
+
+SET(DATA_INSTALLDIR "${LRE_SHARE_INSTALLDIR}/../data")
+
+# Setup install
+INSTALL(
+	FILES        ${DATA_FILES}
+	DESTINATION  ${DATA_INSTALLDIR}
+)
+
+ADD_SUBDIRECTORY(sub)

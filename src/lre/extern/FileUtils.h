@@ -11,6 +11,9 @@
  * OpenSceneGraph Public License for more details.
 */
 
+// This is a stripped down version of the original OSG file
+// to be used in Lightweight Replace Engine
+
 #ifndef OSGDB_FILEUTILS
 #define OSGDB_FILEUTILS 1
 
