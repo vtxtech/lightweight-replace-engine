@@ -36,7 +36,7 @@ ENDIF(BUILD_SHARED_LIBS)
 
 OPTION(LRE_BUILD_EXAMPLES "Set to ON to build LRE examples." ON)
 OPTION(LRE_BUILD_TESTS "Set to ON to build LRE tests." ON)
-SET(LRE_SHARE_INSTALLDIR "${CMAKE_INSTALL_PREFIX}/share/LRE/bin" CACHE PATH "Path where to install examples and tests")
+SET(LRE_SHARE_INSTALLDIR "${CMAKE_INSTALL_PREFIX}/share/lre/bin" CACHE PATH "Path where to install examples and tests")
 
 INCLUDE_DIRECTORIES(BEFORE
     ${CMAKE_CURRENT_SOURCE_DIR}/src

@@ -71,7 +71,11 @@ cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
 cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
-INSTALL(TARGETS "gtest" RUNTIME DESTINATION ${LRE_SHARE_INSTALLDIR} )
+IF(BUILD_SHARED_LIBS)
+	INSTALL(TARGETS "gtest"
+		RUNTIME DESTINATION ${LRE_SHARE_INSTALLDIR} 
+	)
+ENDIF(BUILD_SHARED_LIBS)
 
 ########################################################################
 #
