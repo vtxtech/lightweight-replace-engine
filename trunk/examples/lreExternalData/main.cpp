@@ -35,10 +35,10 @@ int main(int argc, char** argv)
 
 	lre::Component* users = re.addComponent("Users");
 	lre::Set* set11 = users->addSet();
-	set11->addPair("name", "jos");
+	set11->addPair("name", "admin");
 	set11->addPair("password", "abc123");
 	lre::Set* set12 = users->addSet();
-	set12->addPair("name", "mw");
+	set12->addPair("name", "user1");
 	set12->addPair("password", "dummy");
 
 	// Finally to the work

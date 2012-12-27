@@ -211,7 +211,11 @@ bool osgDB::fileExists(const std::string& filename)
 #ifdef OSG_USE_UTF8_FILENAME
     return _waccess( OSGDB_STRING_TO_FILENAME(filename).c_str(), F_OK ) == 0;
 #else
-    return access( filename.c_str(), F_OK ) == 0;
+#ifdef WIN32
+    return _access( filename.c_str(), F_OK ) == 0;
+#else
+	return access( filename.c_str(), F_OK ) == 0;
+#endif
 #endif
 }
 

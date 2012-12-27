@@ -1,5 +1,13 @@
 SET(TARGET_TARGETNAME
-    LRE
+    libLRE
+)
+SET(LIB_NAME
+	${TARGET_TARGETNAME}
+)
+# Output name will be LRE.dll/LREd.dll (LRE.so/LREd.so on Linux'es)
+# A different target name is used to avoid conflicts to lre.exe
+SET(LIB_OUTPUT_NAME
+	LRE
 )
 
 #######################################
@@ -42,5 +50,6 @@ ADD_LIBRARY(${TARGET_TARGETNAME}
 )
 
 SET_TARGET_PROPERTIES(${TARGET_TARGETNAME} PROPERTIES PROJECT_LABEL "${LABEL_LRE_USER_DEFINED_DYNAMIC_OR_STATIC} Library ${TARGET_TARGETNAME}")
- 
+SET_TARGET_PROPERTIES(${TARGET_TARGETNAME} PROPERTIES OUTPUT_NAME ${LIB_OUTPUT_NAME})
+  
 INCLUDE(ModuleInstall OPTIONAL)
