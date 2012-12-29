@@ -256,7 +256,7 @@ namespace lre {
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
 				resultData += data;
-				if (appendixAfterLastSet_ || setNumber != compData->getSetCount()-1) {
+				if (appendixAfterLastSet_ || (!appendixAfterLastSet_ && setNumber != compData->getSetCount()-1)) {
 					resultData += appendix_;
 				}
 			}
