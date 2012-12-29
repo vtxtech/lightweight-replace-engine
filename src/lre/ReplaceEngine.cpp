@@ -24,7 +24,7 @@ namespace lre {
 	ReplaceEngine::ReplaceEngine(): recursive_(false), inputPath_(""),
 		outputPath_(""), pattern_("*.in"), removeExtension_(true),
 		keepStructure_(true), dataPath_(""), dataPattern_("*.lre"),
-		appendix_("")
+		appendix_(""), appendixAfterLastSet_(true)
 	{
 	}
 
@@ -50,6 +50,7 @@ namespace lre {
 		ap.addCommandLineOption("--data <path>", "Remove recursive directory structure in output directory. Empty by default. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
+		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
 
 		if (ap.getArgumentCount() <= 1 || ap.isSet("--help") || ap.isSet("-h") || ap.isSet("/?") || ap.isSet("-?")) {
 			ap.reportOptions();
@@ -66,6 +67,10 @@ namespace lre {
 
 		if (ap.isSet("--keepExtension") || ap.isSet("-K")) {
 			removeExtension_ = true;
+		}
+
+		if (ap.isSet("--noFinalAppendix")) {
+			appendixAfterLastSet_ = false;
 		}
 
 		ap.read("--pattern", pattern_);
@@ -250,7 +255,10 @@ namespace lre {
 					std::cout<<"newData:"<<data;
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
-				resultData += data + appendix_;
+				resultData += data;
+				if (appendixAfterLastSet_ || setNumber != compData->getSetCount()-1) {
+					resultData += appendix_;
+				}
 			}
 
 			std::cout<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; std::cout.flush();
