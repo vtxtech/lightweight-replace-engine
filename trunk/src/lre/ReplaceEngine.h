@@ -79,6 +79,10 @@ namespace lre {
 			// @param The string that will be appended
 			void setAppendixString(const std::string& appendix);
 
+			// Define whether after the last set generated the appendix should be added.
+			// @param state Set to true, if desired. True by default.
+			void setAddAppendixAfterLastSet(bool state) { appendixAfterLastSet_ = state; }
+
 			// Creates a new empty Component and returns a reference to it for modification
 			// Note that the name is case sensitive.
 			// @return The newly created component
@@ -98,6 +102,7 @@ namespace lre {
 			bool recursive_;
 			bool keepStructure_;
 			bool removeExtension_;
+			bool appendixAfterLastSet_;
 			std::string inputPath_;
 			std::string outputPath_;
 			std::string pattern_;
