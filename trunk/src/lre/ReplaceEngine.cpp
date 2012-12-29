@@ -23,7 +23,8 @@ namespace lre {
 	//=======================================================================================
 	ReplaceEngine::ReplaceEngine(): recursive_(false), inputPath_(""),
 		outputPath_(""), pattern_("*.in"), removeExtension_(true),
-		keepStructure_(true), dataPath_(""), dataPattern_("*.lre")
+		keepStructure_(true), dataPath_(""), dataPattern_("*.lre"),
+		appendix_("")
 	{
 	}
 
@@ -48,6 +49,7 @@ namespace lre {
 		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
 		ap.addCommandLineOption("--data <path>", "Remove recursive directory structure in output directory. Empty by default. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
+		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
 
 		if (ap.getArgumentCount() <= 1 || ap.isSet("--help") || ap.isSet("-h") || ap.isSet("/?") || ap.isSet("-?")) {
 			ap.reportOptions();
@@ -71,6 +73,7 @@ namespace lre {
 		ap.read("--output", outputPath_);
 		ap.read("--data", dataPath_);
 		ap.read("--dataPattern", dataPattern_);
+		ap.read("--appendix", appendix_);
 
 		return 0;
 	}
@@ -80,6 +83,12 @@ namespace lre {
 	{
 		componentList_.push_back(Component(name));
 		return &(componentList_.at(componentList_.size()-1));
+	}
+
+	//=======================================================================================
+	void ReplaceEngine::setAppendixString(const std::string& appendix)
+	{
+		appendix_ = appendix;
 	}
 
 	//=======================================================================================
@@ -241,7 +250,7 @@ namespace lre {
 					std::cout<<"newData:"<<data;
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
-				resultData += data;
+				resultData += data + appendix_;
 			}
 
 			std::cout<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; std::cout.flush();

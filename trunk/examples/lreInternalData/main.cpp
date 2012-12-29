@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 	re.setRecursive(true);
 	re.setRemoveExtension(true);
 	re.setFilePattern("*.in");
+	re.setAppendixString("\n");
 	
 	// *re.setDataDirectory(...)* is not required because
 	// the data used for replacing is following now:

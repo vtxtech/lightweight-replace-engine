@@ -74,6 +74,11 @@ namespace lre {
 			// and you wish to generate filenames in format 'myfile.cpp'
 			void setRemoveExtension(bool remove) { removeExtension_ = remove; }
 
+			// Define whether a specific string (e.g. line break) should be appended after each generated set
+			// Empty by default.
+			// @param The string that will be appended
+			void setAppendixString(const std::string& appendix);
+
 			// Creates a new empty Component and returns a reference to it for modification
 			// Note that the name is case sensitive.
 			// @return The newly created component
@@ -98,6 +103,7 @@ namespace lre {
 			std::string pattern_;
 			std::string dataPath_;
 			std::string dataPattern_;
+			std::string appendix_;
 
 			// Get a component by its name.
 			// @return Component* if found, otherwise NULL

@@ -163,6 +163,8 @@ namespace lre {
 	//=======================================================================================
 	std::string FileUtil::excludeTrailingSeparator( const std::string& filename )
 	{
+		if (filename == "") { return filename; }
+
 		if (filename.at(filename.size()-1) == '\\' || filename.at(filename.size()-1) == '/') {
 			return filename.substr(0, filename.size()-1);
 		}
