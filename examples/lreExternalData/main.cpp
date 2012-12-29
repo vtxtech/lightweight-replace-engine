@@ -26,6 +26,7 @@ int main(int argc, char** argv)
 	re.setRemoveExtension(true);
 	re.setFilePattern("*.in");
 	re.setAppendixString("\n");
+	re.setAddAppendixAfterLastSet(false);
 	
 	// Define where to find our replacement data (lre::Component and lre::Set)
 	re.setDataDirectory("../data/data-multifile");
