@@ -42,6 +42,12 @@ namespace lre {
 			// Get the map of key/value pairs
 			const StringStringMap& getMap() const;
 
+			// Convert Set to std::string
+			std::string toString() const;
+
+			// Set StringStringMap from std::string
+			bool fromString(const std::string& str);
+
 		private:
 			StringStringMap map_;
 	};

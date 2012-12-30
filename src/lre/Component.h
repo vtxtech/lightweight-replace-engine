@@ -40,6 +40,12 @@ namespace lre {
 			// Get the number of sets
 			unsigned int getSetCount() { return setList_.size(); }
 
+			// Convert Component to std::string
+			std::string toString() const;
+
+			// Set Component from std::string
+			bool fromString(const std::string& str);
+
 		private:
 			std::string name_;
 			SetList setList_;
