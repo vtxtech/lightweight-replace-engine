@@ -40,5 +40,22 @@ namespace lre {
 		return NULL;
 	}
 
+	//=======================================================================================
+	std::string Component::toString() const
+	{
+		std::string result = "<LRE:COMPONENT:"+getName()+">";
+		for (SetList::const_iterator itr = setList_.begin(); itr != setList_.end(); ++itr) {
+			result += itr->toString();
+		}
+		result += "</LRE:COMPONENT:"+getName()+">";
+		return result;
+	}
+
+	//=======================================================================================
+	bool Component::fromString(const std::string& str)
+	{
+		return false;
+	}
+
 } // namespace lre
 

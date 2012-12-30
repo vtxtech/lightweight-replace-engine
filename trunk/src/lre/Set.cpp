@@ -44,5 +44,22 @@ namespace lre {
 		return map_;
 	}
 
+	//=======================================================================================
+	std::string Set::toString() const
+	{
+		std::string result = "<LRE:SET>";
+		for (StringStringMap::const_iterator itr = map_.begin(); itr != map_.end(); ++itr) {
+			result += "<LRE:KEY:"+itr->first+">"+itr->second+"</LRE:KEY:"+itr->first+">";
+		}
+		result += "</LRE:SET>";
+		return result;
+	}
+
+	//=======================================================================================
+	bool Set::fromString(const std::string& str)
+	{
+		return false;
+	}
+
 } // namespace lre
 
