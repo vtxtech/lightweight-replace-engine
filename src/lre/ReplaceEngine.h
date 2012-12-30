@@ -96,6 +96,9 @@ namespace lre {
 			// @return the target filename string including path
 			std::string makeTargetFilename(const std::string& source_filename);
 
+			// Store ComponentList in a file
+			bool saveToFile(const std::string& filename) const;
+
 		private:
 			void reportSetup();
 

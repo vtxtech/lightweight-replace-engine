@@ -272,6 +272,16 @@ namespace lre {
 	}
 
 	//=======================================================================================
+	bool ReplaceEngine::saveToFile(const std::string& filename) const
+	{
+		std::string result = "";
+		for (ComponentList::const_iterator itr = componentList_.begin(); itr != componentList_.end(); ++itr) {
+			result += itr->toString();
+		}
+		return FileUtil::putFile(filename, result);
+	}
+
+	//=======================================================================================
 	void ReplaceEngine::reportSetup()
 	{
 		std::cout<<"--- Lightweight Replace Engine: Setup ---"<<std::endl;
