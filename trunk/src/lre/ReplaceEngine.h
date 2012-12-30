@@ -99,6 +99,9 @@ namespace lre {
 			// Store ComponentList in a file
 			bool saveToFile(const std::string& filename) const;
 
+			// Read ComponentList from file
+			bool readFromFile(const std::string& filename);
+
 		private:
 			void reportSetup();
 

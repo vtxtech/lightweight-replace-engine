@@ -282,6 +282,12 @@ namespace lre {
 	}
 
 	//=======================================================================================
+	bool ReplaceEngine::readFromFile(const std::string& filename)
+	{
+		return false;
+	}
+
+	//=======================================================================================
 	void ReplaceEngine::reportSetup()
 	{
 		std::cout<<"--- Lightweight Replace Engine: Setup ---"<<std::endl;
