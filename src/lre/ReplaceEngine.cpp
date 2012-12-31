@@ -134,7 +134,7 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	std::string ReplaceEngine::makeTargetFilename(const std::string& source_filename)
+	std::string ReplaceEngine::makeTargetFilename(const std::string& source_filename) const
 	{
 		std::string result = source_filename;
 		// Settings for consideration
