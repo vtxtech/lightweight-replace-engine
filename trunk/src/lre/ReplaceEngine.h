@@ -94,7 +94,7 @@ namespace lre {
 
 			// Generates output filename based on current settings
 			// @return the target filename string including path
-			std::string makeTargetFilename(const std::string& source_filename);
+			std::string makeTargetFilename(const std::string& source_filename) const;
 
 			// Store ComponentList in a file
 			bool saveToFile(const std::string& filename) const;
