@@ -10,6 +10,8 @@
 
 #include "Component.h"
 
+#include "FileUtil.h"
+
 namespace lre {
 
 	//=======================================================================================
@@ -43,9 +45,9 @@ namespace lre {
 	//=======================================================================================
 	std::string Component::toString() const
 	{
-		std::string result = "<LRE:COMPONENT:"+getName()+">";
+		std::string result = "<LRE:COMPONENT:"+getName()+">"+lre::FileUtil::getNativeEndline();
 		for (SetList::const_iterator itr = setList_.begin(); itr != setList_.end(); ++itr) {
-			result += itr->toString();
+			result += itr->toString()+lre::FileUtil::getNativeEndline();
 		}
 		result += "</LRE:COMPONENT:"+getName()+">";
 		return result;

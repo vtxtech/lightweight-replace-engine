@@ -10,6 +10,8 @@
 
 #include "Set.h"
 
+#include "FileUtil.h"
+
 namespace lre {
 
 	//=======================================================================================
@@ -47,11 +49,11 @@ namespace lre {
 	//=======================================================================================
 	std::string Set::toString() const
 	{
-		std::string result = "<LRE:SET>";
+		std::string result = "\t<LRE:SET>"+lre::FileUtil::getNativeEndline();
 		for (StringStringMap::const_iterator itr = map_.begin(); itr != map_.end(); ++itr) {
-			result += "<LRE:KEY:"+itr->first+">"+itr->second+"</LRE:KEY:"+itr->first+">";
+			result += "\t\t<LRE:KEY:"+itr->first+">"+itr->second+"</LRE:KEY:"+itr->first+">"+lre::FileUtil::getNativeEndline();
 		}
-		result += "</LRE:SET>";
+		result += "\t</LRE:SET>";
 		return result;
 	}
 

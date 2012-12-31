@@ -75,8 +75,9 @@ namespace lre {
 	//=======================================================================================
 	bool FileUtil::putFile(const std::string& filename, const std::string& text)
 	{
-		std::ofstream of(filename.c_str());
-		if (!of) {
+		std::ofstream of;
+		of.open(filename.c_str());
+		if (!of.is_open()) {
 			return false;
 		}
 		of<<text;
@@ -90,6 +91,16 @@ namespace lre {
 		std::string result = "";
 		result.push_back(osgDB::getNativePathSeparator());
 		return result;
+	}
+
+	//=======================================================================================
+	std::string FileUtil::getNativeEndline()
+	{
+#if defined( __APPLE__ )
+		return "\r";
+#else // this is understood on Windows, UNIX'es and LINUX'es 
+		return "\n";
+#endif
 	}
 
 	//=======================================================================================
