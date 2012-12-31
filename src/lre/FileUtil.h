@@ -27,6 +27,7 @@ namespace lre {
 			static std::string extractDirectory(const std::string& filename);
 			static std::string excludeTrailingSeparator(const std::string& filename);
 			static std::string includeTrailingSeparator(const std::string& filename);
+			static std::string getNativeEndline();
 			static bool makeDirectory(const std::string& path);
 			static std::string separator();
 

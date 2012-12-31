@@ -276,7 +276,7 @@ namespace lre {
 	{
 		std::string result = "";
 		for (ComponentList::const_iterator itr = componentList_.begin(); itr != componentList_.end(); ++itr) {
-			result += itr->toString();
+			result += itr->toString()+lre::FileUtil::getNativeEndline();
 		}
 		return FileUtil::putFile(filename, result);
 	}

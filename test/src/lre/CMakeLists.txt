@@ -9,6 +9,7 @@ SET(TARGET_TARGETNAME
 SET(TARGET_SRC
     unitTest_main.cpp
     LRETest.cpp
+    FileIOTest.cpp
 )
 
 ADD_EXECUTABLE(${TARGET_TARGETNAME} ${TARGET_SRC} ${TARGET_H})
