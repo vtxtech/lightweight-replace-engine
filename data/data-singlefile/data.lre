@@ -1,0 +1,22 @@
+<LRE:COMPONENT:Command>
+	<LRE:SET>
+		<LRE:KEY:description_de>Importiert eine Geometriedatei</LRE:KEY:description_de>
+		<LRE:KEY:description_en>Imports a geometry file</LRE:KEY:description_en>
+		<LRE:KEY:name>import</LRE:KEY:name>
+	</LRE:SET>
+	<LRE:SET>
+		<LRE:KEY:description_de>Beendet die Anwendung</LRE:KEY:description_de>
+		<LRE:KEY:description_en>Exits application</LRE:KEY:description_en>
+		<LRE:KEY:name>exit</LRE:KEY:name>
+	</LRE:SET>
+</LRE:COMPONENT:Command>
+<LRE:COMPONENT:Users>
+	<LRE:SET>
+		<LRE:KEY:name>jos</LRE:KEY:name>
+		<LRE:KEY:password>abc123</LRE:KEY:password>
+	</LRE:SET>
+	<LRE:SET>
+		<LRE:KEY:name>mw</LRE:KEY:name>
+		<LRE:KEY:password>dummy</LRE:KEY:password>
+	</LRE:SET>
+</LRE:COMPONENT:Users>
