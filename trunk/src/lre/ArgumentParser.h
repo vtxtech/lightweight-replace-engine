@@ -6,6 +6,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
+ * @brief LRE's ArgumentParser inspired by OpenSceneGraph by Robert Osfield
  */
 
 #ifndef lre_ArgumentParser_H
