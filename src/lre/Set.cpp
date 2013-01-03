@@ -12,6 +12,9 @@
 
 #include "FileUtil.h"
 
+//-- STL --//
+#include <iostream>
+
 namespace lre {
 
 	//=======================================================================================
@@ -60,7 +63,67 @@ namespace lre {
 	//=======================================================================================
 	bool Set::fromString(const std::string& str)
 	{
-		return false;
+		std::string setTagBegin = "<LRE:SET>";
+		std::string setTagEnd = "</LRE:SET>";
+
+		std::string keyTagBegin1 = "<LRE:KEY:";	std::string keyTagBegin2 = ">";
+		std::string keyTagEnd1 = "</LRE:KEY:"; std::string keyTagEnd2 = ">";
+
+		unsigned int f = 0;
+		unsigned int e = 0;
+		unsigned int i = 0;
+
+		f = str.find(setTagBegin, f);
+
+		// No set inside String
+		if (f == std::string::npos) { return false; }
+		f += setTagBegin.size();
+
+		e = str.find(setTagEnd, f);
+		// Set end tag missing
+		if (e == std::string::npos) { return false; }
+
+		// No key data
+		if (f == e) { return false; }
+
+		while (f != std::string::npos && f < e) {
+			f = str.find(keyTagBegin1, f);
+			// No key element or elements outside of set
+			if (f == std::string::npos || f >= e) {
+				if (i == 0) {
+					// No key found, yet. So this is an error.
+					return false;
+				} else {
+					// We already have one or more keys found, so we should be sure everything is done.
+					return true;
+				}
+			}
+			f += keyTagBegin1.size();
+
+			// Determine the KEY
+			unsigned int keyPos = str.find(keyTagBegin2, f);
+			// Missing ">"
+			if (keyPos == std::string::npos || keyPos >= e) { return false; }
+
+			std::string key = str.substr(f, keyPos-f);
+			std::string endTag = keyTagEnd1+key+keyTagEnd2;
+
+			f = keyPos + keyTagBegin2.size();
+
+			keyPos = str.find(endTag, f);
+			// Missing endTag "</LRE:KEY:key>"
+			if (keyPos == std::string::npos || keyPos >= e) { return false; }
+
+			std::string value = str.substr(f, keyPos-f);
+			f = keyPos+endTag.size();
+
+			// Increment number of found LRE:KEY
+			i++;
+
+			addPair(key, value);
+		}
+
+		return true;
 	}
 
 } // namespace lre
