@@ -88,6 +88,10 @@ namespace lre {
 			// @return The newly created component
 			Component* addComponent(const std::string& name);
 
+			// Public accessor for number of components
+			// @return Number of components defined during runtime by calling addComponent(name)
+			unsigned int getNumComponents() { return componentList_.size(); }
+
 			// Generates one file per call
 			// @return true on success, otherwise false
 			bool processFile(const std::string& source_filename, const std::string& target_filename);

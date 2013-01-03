@@ -43,8 +43,7 @@ TEST_F(SetTest, SetToString)
 	set1.addPair("description_en", "Imports a geometry file");
 	set1.addPair("description_de", "Importiert eine Geometriedatei");
 
-	std::string content_test = set1.toString();
-	EXPECT_TRUE(content_test == content_);
+	EXPECT_TRUE(set1.toString() == content_);
 }
 
 TEST_F(SetTest, SetFromString)
