@@ -15,3 +15,5 @@ INSTALL(
 )
 
 ADD_SUBDIRECTORY(sub)
+ADD_SUBDIRECTORY(data-multifile)
+ADD_SUBDIRECTORY(data-singlefile)

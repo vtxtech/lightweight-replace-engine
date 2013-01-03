@@ -47,7 +47,7 @@ namespace lre {
 		ap.addCommandLineOption("--input <path or filename>", "Sets the input path or filename. Required option.");
 		ap.addCommandLineOption("--output <path>", "Sets the output path. Required option.");
 		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
-		ap.addCommandLineOption("--data <path>", "Remove recursive directory structure in output directory. Empty by default. Required option, if no data is defined in source code, only.");
+		ap.addCommandLineOption("--data <path>", "Data file containg lre::Components or path to multiple files matching --dataPattern. Empty by default. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
 		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
@@ -110,17 +110,46 @@ namespace lre {
 		inputPath_ = FileUtil::excludeTrailingSeparator(inputPath_);
 		dataPath_ = FileUtil::excludeTrailingSeparator(dataPath_);
 
-		// Report input data for std::cout
+		// Report input data to std::cout
 		reportSetup();
+
+		// Backup current lre::Component data which is restored at the end of run()
+		ComponentList tempCompList = componentList_;
+
+		if (dataPath_ != "") {
+			// Build the list of lre::Components from dataPath_
+			std::vector<std::string> dataFiles;
+			dataFiles.clear();
+
+			//std::cout<<"Data file lookup..."<<std::endl;
+			dataFiles = FileUtil::findFiles(dataPath_, dataPattern_, false);
+
+			std::cout<<"--- Data files matching pattern ---"<<std::endl;
+			for (unsigned int i = 0; i < dataFiles.size(); ++i) {
+				std::cout<<"FILE("<<i<<"): "<<dataFiles.at(i)<<"... "<<std::flush;
+				if (loadData(dataFiles.at(i))) {
+					std::cout<<"Success."<<std::endl;
+				} else {
+					std::cout<<"Failed."<<std::endl;
+				}
+			}
+			std::cout<<std::endl;
+		}
+
+		// Report data to std::cout
+		reportData();
 
 		// This is the list of files to be processed
 		std::vector<std::string> files;
 		files.clear();
 
-		std::cout<<"File lookup..."<<std::endl;
+		//std::cout<<"Source file lookup..."<<std::endl;
 		files = FileUtil::findFiles(inputPath_, pattern_, recursive_);
 
-		std::cout<<"--- Files matching pattern ---"<<std::endl;
+#ifdef _DEBUG
+		std::cout<<std::endl;
+#endif
+		std::cout<<"--- Source files matching pattern ---"<<std::endl;
 		for (unsigned int i = 0; i < files.size(); ++i) {
 			std::cout<<"FILE("<<i<<"): "<<files.at(i)<<"... "<<std::flush;
 			if (processFile(files.at(i), makeTargetFilename(files.at(i)))) {
@@ -129,6 +158,9 @@ namespace lre {
 				std::cout<<"Failed."<<std::endl;
 			}
 		}
+
+		// Restore componentList_ from backup before file loading
+		componentList_ = tempCompList;
 
 		return 0;
 	}
@@ -272,7 +304,7 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	bool ReplaceEngine::saveToFile(const std::string& filename) const
+	bool ReplaceEngine::saveData(const std::string& filename) const
 	{
 		std::string result = "";
 		for (ComponentList::const_iterator itr = componentList_.begin(); itr != componentList_.end(); ++itr) {
@@ -282,7 +314,7 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	bool ReplaceEngine::readFromFile(const std::string& filename)
+	bool ReplaceEngine::loadData(const std::string& filename)
 	{
 		return false;
 	}
@@ -296,10 +328,16 @@ namespace lre {
 		std::cout<<"Input path: "<<inputPath_<<std::endl;
 		std::cout<<"Input file pattern: "<<pattern_<<std::endl;
 		std::cout<<"Output directory: "<<outputPath_<<std::endl;
-		std::cout<<"Data directory: "<<dataPath_<<std::endl;
+		std::cout<<"Data path: "<<dataPath_<<std::endl;
 		std::cout<<"Data file pattern: "<<dataPattern_<<std::endl;
 		std::cout<<"Keep directory structure: "<<keepStructure_<<std::endl;
-		std::cout<<"--- Data ---"<<std::endl;
+		std::cout<<std::endl;
+	}
+
+	//=======================================================================================
+	void ReplaceEngine::reportData()
+	{
+		std::cout<<"--- Lightweight Replace Engine: Data ---"<<std::endl;
 		std::cout<<"No. of Components: "<<componentList_.size()<<std::endl;
 		for (ComponentList::const_iterator itr = componentList_.begin(); itr != componentList_.end(); ++itr) {
 			std::cout<<"Component: "<<itr->getName()<<std::endl;

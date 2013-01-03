@@ -97,13 +97,14 @@ namespace lre {
 			std::string makeTargetFilename(const std::string& source_filename) const;
 
 			// Store ComponentList in a file
-			bool saveToFile(const std::string& filename) const;
+			bool saveData(const std::string& filename) const;
 
 			// Read ComponentList from file
-			bool readFromFile(const std::string& filename);
+			bool loadData(const std::string& filename);
 
 		private:
 			void reportSetup();
+			void reportData();
 
 			bool recursive_;
 			bool keepStructure_;

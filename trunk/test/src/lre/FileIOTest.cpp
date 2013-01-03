@@ -65,7 +65,7 @@ TEST_F(FileIOTest, WriteData)
 	set12->addPair("name", "mw");
 	set12->addPair("password", "dummy");
 
-	EXPECT_TRUE(re.saveToFile(filename_));
+	EXPECT_TRUE(re.saveData(filename_));
 
 	std::string content_test = lre::FileUtil::getFile(filename_);
 	EXPECT_TRUE(content_test == "<LRE:COMPONENT:Command>"+lre::FileUtil::getNativeEndline()+
