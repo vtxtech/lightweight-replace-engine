@@ -39,7 +39,7 @@ class FileIOTest : public ::testing::Test {
 
 };
 
-TEST_F(FileIOTest, WriteData)
+TEST_F(FileIOTest, WriteReadData)
 {
 	// Create a ReplaceEngine to do the job
 	lre::ReplaceEngine re;
@@ -91,6 +91,12 @@ TEST_F(FileIOTest, WriteData)
 								"	</LRE:SET>"+lre::FileUtil::getNativeEndline()+
 								"</LRE:COMPONENT:Users>"+lre::FileUtil::getNativeEndline()+
 								"");
+
+	// Create another ReplaceEngine to read the file
+	lre::ReplaceEngine re2;
+	EXPECT_TRUE(re2.loadData(filename_));
+
+	EXPECT_EQ(2, re2.getNumComponents());
 }
 
 

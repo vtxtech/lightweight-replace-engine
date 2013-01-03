@@ -316,7 +316,59 @@ namespace lre {
 	//=======================================================================================
 	bool ReplaceEngine::loadData(const std::string& filename)
 	{
-		return false;
+		std::string str = FileUtil::getFile(filename);
+		
+		// Failed to read or empty file
+		if (str == "") { return false; }
+
+		std::string compTagBegin1 = "<LRE:COMPONENT:"; std::string compTagBegin2 = ">";
+		std::string compTagEnd1 = "</LRE:COMPONENT:"; std::string compTagEnd2 = ">";
+
+		unsigned int f = 0; // the current string position
+		unsigned int s = 0; // position of the start of the component
+		unsigned int e = 0; // position of the end of the component
+		unsigned int i = 0; // number of components found inside the file
+
+		while (f != std::string::npos) {
+			f = str.find(compTagBegin1, f);
+			s = f;
+			if (f == std::string::npos) {
+				if (i == 0) {
+					// No component found, yet. So this is an error.
+					return false;
+				} else {
+					// We already have one or more components found, so we should be sure everything is done.
+					return true;
+				}
+			}
+			f += compTagBegin1.size();
+
+			unsigned int namePos = str.find(compTagBegin2, f);
+			// Component ">" missing
+			if (namePos == std::string::npos) { return false; }
+
+			// Determine Component Name
+			std::string compName = str.substr(f, namePos-f);
+			f = namePos + compTagBegin2.size();
+
+			std::string endTag = compTagEnd1+compName+compTagEnd2;
+			e = str.find(endTag, f);
+			// Missing endTag "</LRE:COMPONENT:compName>"
+			if (e == std::string::npos) { return false; }
+			e += endTag.size();
+
+			lre::Component newComponent("");
+			if (newComponent.fromString(str.substr(s, e-s))) {
+				componentList_.push_back(newComponent);
+				f = e;
+				i++;
+			} else {
+				// Invalid component data
+				return false;
+			}
+		}
+
+		return (i>0);
 	}
 
 	//=======================================================================================
