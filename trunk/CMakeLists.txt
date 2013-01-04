@@ -52,6 +52,7 @@ SET(LRE_SHARE_INSTALLDIR_DATA "${LRE_SHARE_INSTALLDIR}/data")
 # Tell the user to set the LD_LIBRARY_PATH appropriately if not installing to /usr
 IF(UNIX)
 	IF(NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+		MESSAGE("Your install path is set to ${CMAKE_INSTALL_PREFIX}, thus your system might not find the library files at ${CMAKE_INSTALL_PREFIX}/lib.")
 		MESSAGE("Before running LRE be sure to set the LD_LIBRARY_PATH appropriately to your library install path")
 		MESSAGE("On bash use: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CMAKE_INSTALL_PREFIX}/lib")
 	ENDIF(NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
