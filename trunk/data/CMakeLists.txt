@@ -2,7 +2,6 @@ SET(DATA_PATH ${CMAKE_SOURCE_DIR}/data)
 
 SET(DATA_FILES
 	${DATA_PATH}/doc1.csv.in
-	${DATA_PATH}/lre.bat
 	${DATA_PATH}/test.csv
 )
 
