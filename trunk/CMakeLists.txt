@@ -40,14 +40,22 @@ OPTION(LRE_BUILD_TESTS "Set to ON to build LRE tests." ON)
 SET(HOME_DIR $ENV{HOME})
 
 IF("${HOME_DIR}" STREQUAL "")
-	SET(LRE_SHARE_DEFAULT "${CMAKE_INSTALL_PREFIX}/share")
+	SET(LRE_SHARE_DEFAULT "${CMAKE_INSTALL_PREFIX}/share/lre")
 ELSE("${HOME_DIR}" STREQUAL "")
 	SET(LRE_SHARE_DEFAULT "$ENV{HOME}/lre")	
 ENDIF("${HOME_DIR}" STREQUAL "")
 
-SET(LRE_SHARE_INSTALLDIR ${LRE_SHARE_DEFAULT} CACHE PATH "Path where to install data ('./lre/data'), examples and tests ('./lre/bin')")
-SET(LRE_SHARE_INSTALLDIR_BIN "${LRE_SHARE_INSTALLDIR}/lre/bin")
-SET(LRE_SHARE_INSTALLDIR_DATA "${LRE_SHARE_INSTALLDIR}/lre/data")
+SET(LRE_SHARE_INSTALLDIR ${LRE_SHARE_DEFAULT} CACHE PATH "Path where to install data ('./data'), examples and tests ('./bin')")
+SET(LRE_SHARE_INSTALLDIR_BIN "${LRE_SHARE_INSTALLDIR}/bin")
+SET(LRE_SHARE_INSTALLDIR_DATA "${LRE_SHARE_INSTALLDIR}/data")
+
+# Tell the user to set the LD_LIBRARY_PATH appropriately if not installing to /usr
+IF(UNIX)
+	IF(NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+		MESSAGE("Before running LRE be sure to set the LD_LIBRARY_PATH appropriately to your library install path")
+		MESSAGE("On bash use: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CMAKE_INSTALL_PREFIX}/lib")
+	ENDIF(NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+ENDIF(UNIX)
 
 INCLUDE_DIRECTORIES(BEFORE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
