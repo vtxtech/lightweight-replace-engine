@@ -1,0 +1,79 @@
+# -----------------------------------------------------------------------------
+#
+# Lightweight Replace Engine
+# Copyright (C) 2012-2013 Johannes Scholz. All rights reserved.
+#
+# This file is licensed under the GNU Lesser General Public License 3 (LGPLv3),
+# but is distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# -----------------------------------------------------------------------------
+# LRE uses some portions of code from the great OpenSceneGraph project which
+# are licensed under the OSGPL which is mainly a LGPL-derivate.
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+# What is LRE?
+# --------------------
+# Lightweight Replace Engine is a easy-to-use text file preprocessor that is
+# used to generate text documents based on template documents. LRE does have no
+# dependencies so it may be used as single file standalone executable for
+# preprocessing any type of text file. LRE may also be used as linked C++
+# library directly from inside your C++ source code.
+# 
+# -----------------------------------------------------------------------------
+# Intention of LRE
+# --------------------
+# LRE is intended to create offline documentation files (e.g. tex, txt or csv)
+# from your application's source code or internal application data. Actually
+# LRE may also be used to preprocess any programming languages source files
+# where preprocessing by CMake's "configure_file" or any other build system you
+# use is not applicable. This may be the case if inclusion of runtime
+# information is necessary to generate your target files.
+# 
+# -----------------------------------------------------------------------------
+# Usage of LRE
+# --------------------
+# LRE features a simple XML-like syntax to define placeholders inside the
+# template documents. During generation run that placeholders are replaced by
+# values from your user defined data sets. LRE comes with a set of examples and
+# test cases documenting most use-cases for easily getting started.
+# 
+# -----------------------------------------------------------------------------
+# Building LRE
+# --------------------
+# For building LRE the cross-platform make tool CMake is required to generate
+# project files suiting your compiler. LRE is both tested on Windows and Linux.
+# 
+# Supported (tested) compilers:
+# 
+# Windows: Visual Studio 2008 Express
+# Linux: gcc 4.6 on lubuntu 11.04, but LRE should compile on gcc 4.4 or higher,
+# as well.
+#
+# We recommend using the CMake-gui rather than the commandline tool if you are
+# not familiar with CMake.
+# 
+# On Windows default CMake settings should be fine. On Linux you might think
+# about either installing into "/usr" instead of "/usr/local" or you set the
+# LD_LIBRARY_PATH according to your settings (e.g. "/usr/local/lib"). The LRE
+# CMake build script reports some help on that during configuration.
+# 
+# -----------------------------------------------------------------------------
+# Downloading LRE
+# --------------------
+# Currently there is source code released, only. At the moment we do not
+# provide a binary release. If you intend to use LRE please checkout the
+# sources and compile by yourself.
+# 
+# -----------------------------------------------------------------------------
+# Licensing of LRE
+# --------------------
+# LRE is supplied AS-IS without any warranty and is licensed under the GNU
+# Lesser GPL Version 3.0.
+#
+# -----------------------------------------------------------------------------
+# Commercial Support
+# -------------------- 
+# If you require commercial support feel free to mail the developer.
+# 
