@@ -12,6 +12,8 @@
 # are licensed under the OSGPL which is mainly a LGPL-derivate.
 # -----------------------------------------------------------------------------
 #
+# For help on building see GETTING_STARTED.txt
+#
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.0 (upcoming release)
 # --------------------------------------------------------
