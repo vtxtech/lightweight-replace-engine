@@ -4,20 +4,13 @@
 # Copyright (C) 2012-2013 Johannes Scholz. All rights reserved.
 #
 # This file is licensed under the GNU Lesser General Public License 3 (LGPLv3),
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# but is distributed WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # -----------------------------------------------------------------------------
 # LRE uses some portions of code from the great OpenSceneGraph project which
 # are licensed under the OSGPL which is mainly a LGPL-derivate.
 # -----------------------------------------------------------------------------
-#
-# Versioning convention: LRE uses odd minor version numbers for developer
-# releases and even minor version numbers for stable releases.
-#
-# -----------------------------------------------------------------------------
-# ToDo-List for upcoming releases:
-# - Remove any OpenSceneGraph code
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.0 (upcoming release)
