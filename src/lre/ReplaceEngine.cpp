@@ -18,6 +18,9 @@
 #include <iostream>
 #include <fstream>
 
+//-- OSG --//
+#include "extern/FileUtils.h"
+
 namespace lre {
 
 	//=======================================================================================
@@ -47,7 +50,7 @@ namespace lre {
 		ap.addCommandLineOption("--input <path or filename>", "Sets the input path or filename. Required option.");
 		ap.addCommandLineOption("--output <path>", "Sets the output path. Required option.");
 		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
-		ap.addCommandLineOption("--data <path>", "Data file containg lre::Components or path to multiple files matching --dataPattern. Empty by default. Required option, if no data is defined in source code, only.");
+		ap.addCommandLineOption("--data <path or filename>", "Data file containg Components or path to multiple files matching --dataPattern. Empty by default. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
 		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
@@ -168,18 +171,30 @@ namespace lre {
 	//=======================================================================================
 	std::string ReplaceEngine::makeTargetFilename(const std::string& source_filename) const
 	{
+		std::cout<<"target file..."<<std::endl;
 		std::string result = source_filename;
 		// Settings for consideration
 		// * bool removeExtension_;
 		// * bool keepStructure_;
 		// * std::string inputPath_;
 		// * std::string outputPath_;
+		std::string outputPath = outputPath_;
+		std::string inputPath = inputPath_;
+		if (osgDB::fileType(inputPath) == osgDB::REGULAR_FILE) {
+			inputPath = FileUtil::extractDirectory(inputPath);
+		}
+		if (osgDB::fileType(outputPath) == osgDB::REGULAR_FILE) {
+			outputPath = FileUtil::extractDirectory(outputPath);
+		}
+		std::cout<<"outputPath="<<outputPath<<std::endl;
+		std::cout<<"inputPath="<<inputPath<<std::endl;
+		std::cout<<"source_filename="<<source_filename<<std::endl;
 		if (!keepStructure_) {
 			// Output straight into the target folder
-			result = outputPath_ + FileUtil::separator() + FileUtil::extractFilename(result);
+			result = outputPath + FileUtil::separator() + FileUtil::extractFilename(result);
 		} else {
-			std::string relative = source_filename.substr(inputPath_.size()+1, source_filename.size()-(inputPath_.size()+1));
-			result = outputPath_ + FileUtil::separator() + relative;
+			std::string relative = source_filename.substr(inputPath.size()+1, source_filename.size()-(inputPath.size()+1));
+			result = outputPath + FileUtil::separator() + relative;
 		}
 		if (removeExtension_) { result = FileUtil::removeExtension(result); }
 		return result;
@@ -197,6 +212,7 @@ namespace lre {
 	//=======================================================================================
 	bool ReplaceEngine::processFile(const std::string& source_filename, const std::string& target_filename)
 	{
+		std::cout<<"Processing..."<<std::endl;
 		// Make a directory for the file, if it does not exist. makeDirectory
 		// returns true if successfully created or already existing.
 		if (!FileUtil::makeDirectory(FileUtil::extractDirectory(target_filename))) {
