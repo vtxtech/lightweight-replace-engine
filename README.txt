@@ -26,6 +26,7 @@
 # * Support of gcc for Linux builds (Tested on gcc 4.6.3)
 # * Updated CMake System to support Linux paths more generally
 # * Added GETTING_STARTED.txt
+# * Fixed crash bug when using filenames on input path or output path
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.3.0 (2013-01-03, Developer Release)
