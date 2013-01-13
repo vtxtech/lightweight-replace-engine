@@ -15,11 +15,17 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
+# ToDo list for upcoming release (0.5.0)
+# --------------------------------------------------------
+# * Remove any OpenSceneGraph code
+#
+# -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.0 (upcoming release)
 # --------------------------------------------------------
 #
 # * Support of gcc for Linux builds (Tested on gcc 4.6.3)
 # * Updated CMake System to support Linux paths more generally
+# * Added GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.3.0 (2013-01-03, Developer Release)
