@@ -35,6 +35,7 @@ namespace lre {
 
 			// Initialize from command line arguments (optionally). ReplaceEngine uses default settings if not called.
 			int init(int argc, char** argv);
+			int init(int argc, const char** argv);
 
 			// Invoke a ReplaceEngine run
 			// @return 0 if succeeded. Error codes are >=1

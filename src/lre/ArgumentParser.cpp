@@ -18,6 +18,17 @@
 namespace lre {
 
 	//=======================================================================================
+	ArgumentParser::ArgumentParser(int argc, const char** argv): appUsage_(""), appName_("")
+	{
+		const char** tmp = argv;
+		arguments_.clear();
+		for (int i = 0; i < argc; ++i) {
+			arguments_.push_back(std::string(*tmp));
+			tmp++;
+		}
+	}
+
+	//=======================================================================================
 	ArgumentParser::ArgumentParser(int argc, char** argv): appUsage_(""), appName_("")
 	{
 		char** tmp = argv;
