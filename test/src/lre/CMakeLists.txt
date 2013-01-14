@@ -8,6 +8,7 @@ SET(TARGET_TARGETNAME
 
 SET(TARGET_SRC
     unitTest_main.cpp
+    CommandLineTest.cpp
     ComponentTest.cpp
     FileIOTest.cpp
     SetTest.cpp

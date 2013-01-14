@@ -100,7 +100,7 @@ TEST_F(FileIOTest, WriteReadData)
 
 	lre::Component* test_commands = re2.getComponent("Command");
 	EXPECT_TRUE(test_commands != NULL);
-	EXPECT_EQ(2, test_commands->getSetCount());
+	EXPECT_EQ(2, test_commands->getNumSets());
 
 	{
 		lre::Set* tmp_set = test_commands->getSet(0);
@@ -140,7 +140,7 @@ TEST_F(FileIOTest, WriteReadData)
 
 	lre::Component* test_users = re2.getComponent("Users");
 	EXPECT_TRUE(test_users != NULL);
-	EXPECT_EQ(2, test_users->getSetCount());
+	EXPECT_EQ(2, test_users->getNumSets());
 
 	{
 		lre::Set* tmp_set = test_users->getSet(0);

@@ -15,9 +15,15 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
-# ToDo list for upcoming release (0.5.0)
+# ToDo list for upcoming releases
 # --------------------------------------------------------
-# * Remove any OpenSceneGraph code
+# * (0.5.0) Improve test coverage
+#
+# * (0.7.0) Move settings from ReplaceEngine to separate class
+# * (0.7.0) Report invalid command arguments
+#
+# * (0.9.0) Enhance documentation files
+# * (0.9.0) Remove any OpenSceneGraph code
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.0 (upcoming release)
@@ -27,6 +33,7 @@
 # * Updated CMake System to support Linux paths more generally
 # * Added GETTING_STARTED.txt
 # * Fixed crash bug when using filenames on input path or output path
+# * Fixed arguments --forgetSubfolders and --keepExtension not changing config
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.3.0 (2013-01-03, Developer Release)

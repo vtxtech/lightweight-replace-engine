@@ -65,7 +65,7 @@ TEST_F(ComponentTest, ComponentFromString)
 
 	EXPECT_EQ("Command", comp.getName());
 
-	EXPECT_EQ(2, comp.getSetCount());
+	EXPECT_EQ(2, comp.getNumSets());
 
 	// *** Check contents of Set #1 *** 
 	lre::Set* set1 = comp.getSet(0);
