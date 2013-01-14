@@ -40,6 +40,12 @@ namespace lre {
 	//=======================================================================================
 	int ReplaceEngine::init(int argc, char** argv)
 	{
+		return init(argc, argv);
+	}
+
+	//=======================================================================================
+	int ReplaceEngine::init(int argc, const char** argv)
+	{
 		lre::ArgumentParser ap(argc, argv);
 		ap.setApplicationName("Lightweight Replace Engine by Johannes Scholz");
 		ap.setApplicationUsage("[options]");

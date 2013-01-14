@@ -33,8 +33,12 @@ namespace lre {
 	// A lightweight command line argument parser
 	class LRE_EXPORT ArgumentParser {
 		public:
-			// Parameter constructor
+			// Parameter constructor with const char**
+			ArgumentParser(int argc, const char** argv);
+
+			// Parameter constructor with char**
 			ArgumentParser(int argc, char** argv);
+
 			// Virtual destructor
 			virtual ~ArgumentParser();
 
