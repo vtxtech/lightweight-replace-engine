@@ -38,7 +38,7 @@ namespace lre {
 			Set* getSet(unsigned int index);
 
 			// Get the number of sets
-			unsigned int getSetCount() { return setList_.size(); }
+			unsigned int getNumSets() { return setList_.size(); }
 
 			// Convert Component to std::string
 			std::string toString() const;

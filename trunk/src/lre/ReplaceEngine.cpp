@@ -65,11 +65,11 @@ namespace lre {
 		}
 
 		if (ap.isSet("--forgetSubfolders") || ap.isSet("-F")) {
-			keepStructure_ = true;
+			keepStructure_ = false;
 		}
 
 		if (ap.isSet("--keepExtension") || ap.isSet("-K")) {
-			removeExtension_ = true;
+			removeExtension_ = false;
 		}
 
 		if (ap.isSet("--noFinalAppendix")) {
@@ -266,7 +266,7 @@ namespace lre {
 
 			std::string resultData = "";
 
-			for (unsigned int setNumber = 0; setNumber < compData->getSetCount(); ++setNumber) {
+			for (unsigned int setNumber = 0; setNumber < compData->getNumSets(); ++setNumber) {
 				Set* dataSet = compData->getSet(setNumber);
 				if (dataSet == NULL) {
 					std::cout<<" --- Failed to get Set no. "<<setNumber<<" --- "<<std::endl;
@@ -304,7 +304,7 @@ namespace lre {
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
 				resultData += data;
-				if (appendixAfterLastSet_ || (!appendixAfterLastSet_ && setNumber != compData->getSetCount()-1)) {
+				if (appendixAfterLastSet_ || (!appendixAfterLastSet_ && setNumber != compData->getNumSets()-1)) {
 					resultData += appendix_;
 				}
 			}

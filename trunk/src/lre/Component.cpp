@@ -36,7 +36,7 @@ namespace lre {
 	//=======================================================================================
 	Set* Component::getSet(unsigned int index)
 	{
-		if (index < getSetCount()) {
+		if (index < getNumSets()) {
 			return &(setList_.at(index));
 		}
 		return NULL;
