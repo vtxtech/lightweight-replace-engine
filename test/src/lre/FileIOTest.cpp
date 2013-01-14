@@ -97,6 +97,78 @@ TEST_F(FileIOTest, WriteReadData)
 	EXPECT_TRUE(re2.loadData(filename_));
 
 	EXPECT_EQ(2, re2.getNumComponents());
+
+	lre::Component* test_commands = re2.getComponent("Command");
+	EXPECT_TRUE(test_commands != NULL);
+	EXPECT_EQ(2, test_commands->getSetCount());
+
+	{
+		lre::Set* tmp_set = test_commands->getSet(0);
+		// We should have three key/value pairs
+		EXPECT_EQ(3, tmp_set->getMap().size());
+
+		lre::StringStringMap::const_iterator itr = tmp_set->getMap().begin();
+		EXPECT_EQ("description_de", itr->first);
+		EXPECT_EQ("Importiert eine Geometriedatei", itr->second);
+
+		++itr;
+		EXPECT_EQ("description_en", itr->first);
+		EXPECT_EQ("Imports a geometry file", itr->second);
+
+		++itr;
+		EXPECT_EQ("name", itr->first);
+		EXPECT_EQ("import", itr->second);
+	}
+	
+	{
+		lre::Set* tmp_set = test_commands->getSet(1);
+		// We should have three key/value pairs
+		EXPECT_EQ(3, tmp_set->getMap().size());
+
+		lre::StringStringMap::const_iterator itr = tmp_set->getMap().begin();
+		EXPECT_EQ("description_de", itr->first);
+		EXPECT_EQ("Beendet die Anwendung", itr->second);
+
+		++itr;
+		EXPECT_EQ("description_en", itr->first);
+		EXPECT_EQ("Exits application", itr->second);
+
+		++itr;
+		EXPECT_EQ("name", itr->first);
+		EXPECT_EQ("exit", itr->second);
+	}
+
+	lre::Component* test_users = re2.getComponent("Users");
+	EXPECT_TRUE(test_users != NULL);
+	EXPECT_EQ(2, test_users->getSetCount());
+
+	{
+		lre::Set* tmp_set = test_users->getSet(0);
+		// We should have three key/value pairs
+		EXPECT_EQ(2, tmp_set->getMap().size());
+
+		lre::StringStringMap::const_iterator itr = tmp_set->getMap().begin();
+		EXPECT_EQ("name", itr->first);
+		EXPECT_EQ("jos", itr->second);
+
+		++itr;
+		EXPECT_EQ("password", itr->first);
+		EXPECT_EQ("abc123", itr->second);
+	}
+	
+	{
+		lre::Set* tmp_set = test_users->getSet(1);
+		// We should have three key/value pairs
+		EXPECT_EQ(2, tmp_set->getMap().size());
+
+		lre::StringStringMap::const_iterator itr = tmp_set->getMap().begin();
+		EXPECT_EQ("name", itr->first);
+		EXPECT_EQ("mw", itr->second);
+
+		++itr;
+		EXPECT_EQ("password", itr->first);
+		EXPECT_EQ("dummy", itr->second);
+	}
 }
 
 
