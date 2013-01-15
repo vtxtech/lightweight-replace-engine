@@ -40,7 +40,7 @@ namespace lre {
 	//=======================================================================================
 	int ReplaceEngine::init(int argc, char** argv)
 	{
-		return init(argc, argv);
+		return init(argc, const_cast<const char**>(argv));
 	}
 
 	//=======================================================================================
