@@ -17,8 +17,6 @@
 # -----------------------------------------------------------------------------
 # ToDo list for upcoming releases
 # --------------------------------------------------------
-# * (0.5.0) Improve test coverage
-# -----------
 # * (0.7.0) Move settings from ReplaceEngine to separate class
 # * (0.7.0) Report invalid command arguments
 # -----------
@@ -37,6 +35,7 @@
 # * Added GETTING_STARTED.txt
 # * Fixed crash bug when using filenames on input path or output path
 # * Fixed arguments --forgetSubfolders and --keepExtension not changing config
+# * Improved test coverage
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.3.0 (2013-01-03, Developer Release)
