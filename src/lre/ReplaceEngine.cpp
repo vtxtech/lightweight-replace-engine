@@ -40,6 +40,9 @@ namespace lre {
 	//=======================================================================================
 	int ReplaceEngine::init(int argc, char** argv)
 	{
+		// We do not need "char**", since nothing will be changed
+		// so we cast to "const char**", so both may
+		// be passed to our ReplaceEngine.
 		return init(argc, const_cast<const char**>(argv));
 	}
 
