@@ -18,12 +18,15 @@
 # ToDo list for upcoming releases
 # --------------------------------------------------------
 # * (0.5.0) Improve test coverage
-#
+# -----------
 # * (0.7.0) Move settings from ReplaceEngine to separate class
 # * (0.7.0) Report invalid command arguments
-#
+# -----------
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
+# -----------
+# * (1.0.0) Remove warnings
+# * (1.0.0) Stability tests
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.0 (upcoming release)
