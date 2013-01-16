@@ -13,24 +13,24 @@
 
 // --- LRE --- //
 #include <lre/Component.h>
-#include <lre/FileUtil.h>
+#include <lre/FileUtils.h>
 
 class ComponentTest : public ::testing::Test {
   public:
 
     virtual void SetUp()
 	{
-		content_ =	"<LRE:COMPONENT:Command>"+lre::FileUtil::getNativeEndline()+
-					"	<LRE:SET>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:description_de>Importiert eine Geometriedatei</LRE:KEY:description_de>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:description_en>Imports a geometry file</LRE:KEY:description_en>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:name>import</LRE:KEY:name>"+lre::FileUtil::getNativeEndline()+
-					"	</LRE:SET>"+lre::FileUtil::getNativeEndline()+
-					"	<LRE:SET>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:description_de>Beendet die Anwendung</LRE:KEY:description_de>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:description_en>Exits application</LRE:KEY:description_en>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:name>exit</LRE:KEY:name>"+lre::FileUtil::getNativeEndline()+
-					"	</LRE:SET>"+lre::FileUtil::getNativeEndline()+
+		content_ =	"<LRE:COMPONENT:Command>"+lre::FileUtils::getNativeEndline()+
+					"	<LRE:SET>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:description_de>Importiert eine Geometriedatei</LRE:KEY:description_de>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:description_en>Imports a geometry file</LRE:KEY:description_en>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:name>import</LRE:KEY:name>"+lre::FileUtils::getNativeEndline()+
+					"	</LRE:SET>"+lre::FileUtils::getNativeEndline()+
+					"	<LRE:SET>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:description_de>Beendet die Anwendung</LRE:KEY:description_de>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:description_en>Exits application</LRE:KEY:description_en>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:name>exit</LRE:KEY:name>"+lre::FileUtils::getNativeEndline()+
+					"	</LRE:SET>"+lre::FileUtils::getNativeEndline()+
 					"</LRE:COMPONENT:Command>";
     }
     

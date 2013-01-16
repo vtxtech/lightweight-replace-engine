@@ -20,15 +20,15 @@ int main(int argc, char** argv)
 	
 	// Ignore any command line arguments
 	// we setup everything manually here.
-	re.setInput("../data");
-	re.setOutputDirectory("./generated");
-	re.setRecursive(true);
-	re.setRemoveExtension(true);
-	re.setFilePattern("*.in");
-	re.setAppendixString("\n");
-	re.setAddAppendixAfterLastSet(false);
+	re.settings().setInput("../data");
+	re.settings().setOutputDirectory("./generated-by-lreInternalData");
+	re.settings().setRecursive(true);
+	re.settings().setRemoveExtension(true);
+	re.settings().setFilePattern("*.in");
+	re.settings().setAppendixString("\n");
+	re.settings().setAddAppendixAfterLastSet(false);
 	
-	// *re.setDataDirectory(...)* is not required because
+	// *re.settings().setDataDirectory(...)* is not required because
 	// the data used for replacing is following now:
 
 	// Add the data for file generation here

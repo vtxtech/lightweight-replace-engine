@@ -12,7 +12,7 @@
 
 #include "ArgumentParser.h"
 #include "Component.h"
-#include "FileUtil.h"
+#include "FileUtils.h"
 
 //-- STL --//
 #include <iostream>
@@ -24,11 +24,9 @@
 namespace lre {
 
 	//=======================================================================================
-	ReplaceEngine::ReplaceEngine(): recursive_(false), inputPath_(""),
-		outputPath_(""), pattern_("*.in"), removeExtension_(true),
-		keepStructure_(true), dataPath_(""), dataPattern_("*.lre"),
-		appendix_(""), appendixAfterLastSet_(true)
+	ReplaceEngine::ReplaceEngine()
 	{
+		// Nothing to be done.
 	}
 
 	//=======================================================================================
@@ -49,50 +47,7 @@ namespace lre {
 	//=======================================================================================
 	int ReplaceEngine::init(int argc, const char** argv)
 	{
-		lre::ArgumentParser ap(argc, argv);
-		ap.setApplicationName("Lightweight Replace Engine by Johannes Scholz");
-		ap.setApplicationUsage("[options]");
-
-		ap.addCommandLineOption("--recursive or --R", "Enables input path recursive mode. Only valid if --input is set to a path. Disabled by default.");
-		ap.addCommandLineOption("--keepExtension or -K", "Define whether the extension should be kept in the target filenames. Usually the last extension in the input file name is removed. Remove extensions only if your files are 'myfile.txt.in' format.");
-		ap.addCommandLineOption("--pattern <file_pattern>", "Sets the file pattern to match if --input is set to a path. Default is '*.in'. Allowed wildcards: * and ?");
-		ap.addCommandLineOption("--input <path or filename>", "Sets the input path or filename. Required option.");
-		ap.addCommandLineOption("--output <path>", "Sets the output path. Required option.");
-		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
-		ap.addCommandLineOption("--data <path or filename>", "Data file containg Components or path to multiple files matching --dataPattern. Empty by default. Required option, if no data is defined in source code, only.");
-		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
-		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
-		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
-
-		if (ap.getArgumentCount() <= 1 || ap.isSet("--help") || ap.isSet("-h") || ap.isSet("/?") || ap.isSet("-?")) {
-			ap.reportOptions();
-			return 1;
-		}
-		
-		if (ap.isSet("--recursive") || ap.isSet("-R")) {
-			recursive_ = true;
-		}
-
-		if (ap.isSet("--forgetSubfolders") || ap.isSet("-F")) {
-			keepStructure_ = false;
-		}
-
-		if (ap.isSet("--keepExtension") || ap.isSet("-K")) {
-			removeExtension_ = false;
-		}
-
-		if (ap.isSet("--noFinalAppendix")) {
-			appendixAfterLastSet_ = false;
-		}
-
-		ap.read("--pattern", pattern_);
-		ap.read("--input", inputPath_);
-		ap.read("--output", outputPath_);
-		ap.read("--data", dataPath_);
-		ap.read("--dataPattern", dataPattern_);
-		ap.read("--appendix", appendix_);
-
-		return 0;
+		return settings_.init(argc, argv);
 	}
 
 	//=======================================================================================
@@ -103,38 +58,32 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	void ReplaceEngine::setAppendixString(const std::string& appendix)
-	{
-		appendix_ = appendix;
-	}
-
-	//=======================================================================================
 	int ReplaceEngine::run()
 	{
 		// Check input data roughly
-		if (inputPath_ == "") { std::cout<<"FATAL: Input path is undefined"<<std::endl; return 1; }
-		if (outputPath_ == "") { std::cout<<"FATAL: Output path is undefined"<<std::endl; return 1; }
-		if (removeExtension_ && pattern_ == "") { std::cout<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return 1; }
-		if (inputPath_ == outputPath_ && !removeExtension_) { std::cout<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return 1; }
-		if (componentList_.size() == 0 && dataPath_ == "") { std::cout<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return 1; }
+		if (settings().getInput() == "") { std::cout<<"FATAL: Input path is undefined"<<std::endl; return 1; }
+		if (settings().getOutputDirectory() == "") { std::cout<<"FATAL: Output path is undefined"<<std::endl; return 1; }
+		if (settings().getRemoveExtension() && settings().getFilePattern() == "") { std::cout<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return 1; }
+		if (settings().getInput() == settings().getOutputDirectory() && !settings().getRemoveExtension()) { std::cout<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return 1; }
+		if (componentList_.size() == 0 && settings().getDataDirectory() == "") { std::cout<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return 1; }
 
-		outputPath_ = FileUtil::excludeTrailingSeparator(outputPath_);
-		inputPath_ = FileUtil::excludeTrailingSeparator(inputPath_);
-		dataPath_ = FileUtil::excludeTrailingSeparator(dataPath_);
+		settings().setOutputDirectory(FileUtils::excludeTrailingSeparator(settings().getOutputDirectory()));
+		settings().setInput(FileUtils::excludeTrailingSeparator(settings().getInput()));
+		settings().setDataDirectory(FileUtils::excludeTrailingSeparator(settings().getDataDirectory()));
 
 		// Report input data to std::cout
-		reportSetup();
+		settings().reportSetup();
 
 		// Backup current lre::Component data which is restored at the end of run()
 		ComponentList tempCompList = componentList_;
 
-		if (dataPath_ != "") {
-			// Build the list of lre::Components from dataPath_
+		if (settings().getDataDirectory() != "") {
+			// Build the list of lre::Components from settings().getDataDirectory()
 			std::vector<std::string> dataFiles;
 			dataFiles.clear();
 
 			//std::cout<<"Data file lookup..."<<std::endl;
-			dataFiles = FileUtil::findFiles(dataPath_, dataPattern_, false);
+			dataFiles = FileUtils::findFiles(settings().getDataDirectory(), settings().getDataPattern(), false);
 
 			std::cout<<"--- Data files matching pattern ---"<<std::endl;
 			for (unsigned int i = 0; i < dataFiles.size(); ++i) {
@@ -156,7 +105,7 @@ namespace lre {
 		files.clear();
 
 		//std::cout<<"Source file lookup..."<<std::endl;
-		files = FileUtil::findFiles(inputPath_, pattern_, recursive_);
+		files = FileUtils::findFiles(settings().getInput(), settings().getFilePattern(), settings().getRecursive());
 
 #ifdef _DEBUG
 		std::cout<<std::endl;
@@ -183,29 +132,29 @@ namespace lre {
 		std::cout<<"target file..."<<std::endl;
 		std::string result = source_filename;
 		// Settings for consideration
-		// * bool removeExtension_;
-		// * bool keepStructure_;
-		// * std::string inputPath_;
-		// * std::string outputPath_;
-		std::string outputPath = outputPath_;
-		std::string inputPath = inputPath_;
+		// * bool settings().getRemoveExtension();
+		// * bool settings().getKeepSubFolders();
+		// * std::string settings().getInput();
+		// * std::string settings().getOutputDirectory();
+		std::string outputPath = settings().getOutputDirectory();
+		std::string inputPath = settings().getInput();
 		if (osgDB::fileType(inputPath) == osgDB::REGULAR_FILE) {
-			inputPath = FileUtil::extractDirectory(inputPath);
+			inputPath = FileUtils::extractDirectory(inputPath);
 		}
 		if (osgDB::fileType(outputPath) == osgDB::REGULAR_FILE) {
-			outputPath = FileUtil::extractDirectory(outputPath);
+			outputPath = FileUtils::extractDirectory(outputPath);
 		}
 		std::cout<<"outputPath="<<outputPath<<std::endl;
 		std::cout<<"inputPath="<<inputPath<<std::endl;
 		std::cout<<"source_filename="<<source_filename<<std::endl;
-		if (!keepStructure_) {
+		if (!settings().getKeepSubFolders()) {
 			// Output straight into the target folder
-			result = outputPath + FileUtil::separator() + FileUtil::extractFilename(result);
+			result = outputPath + FileUtils::separator() + FileUtils::extractFilename(result);
 		} else {
 			std::string relative = source_filename.substr(inputPath.size()+1, source_filename.size()-(inputPath.size()+1));
-			result = outputPath + FileUtil::separator() + relative;
+			result = outputPath + FileUtils::separator() + relative;
 		}
-		if (removeExtension_) { result = FileUtil::removeExtension(result); }
+		if (settings().getRemoveExtension()) { result = FileUtils::removeExtension(result); }
 		return result;
 	}
 
@@ -224,11 +173,11 @@ namespace lre {
 		std::cout<<"Processing..."<<std::endl;
 		// Make a directory for the file, if it does not exist. makeDirectory
 		// returns true if successfully created or already existing.
-		if (!FileUtil::makeDirectory(FileUtil::extractDirectory(target_filename))) {
+		if (!FileUtils::makeDirectory(FileUtils::extractDirectory(target_filename))) {
 			return false;
 		}
 		
-		std::string source = FileUtil::getFile(source_filename);
+		std::string source = FileUtils::getFile(source_filename);
 
 		std::string keywordBegin = "<LRE";
 		std::string keywordEnd = "</LRE";
@@ -313,8 +262,8 @@ namespace lre {
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
 				resultData += data;
-				if (appendixAfterLastSet_ || (!appendixAfterLastSet_ && setNumber != compData->getNumSets()-1)) {
-					resultData += appendix_;
+				if (settings().getAddAppendixAfterLastSet() || (!settings().getAddAppendixAfterLastSet() && setNumber != compData->getNumSets()-1)) {
+					resultData += settings().getAppendixString();
 				}
 			}
 
@@ -325,7 +274,7 @@ namespace lre {
 			f = source.find(comp/*, pos*/);
 		}
 
-		return FileUtil::putFile(target_filename, source);
+		return FileUtils::putFile(target_filename, source);
 	}
 
 	//=======================================================================================
@@ -333,15 +282,15 @@ namespace lre {
 	{
 		std::string result = "";
 		for (ComponentList::const_iterator itr = componentList_.begin(); itr != componentList_.end(); ++itr) {
-			result += itr->toString()+lre::FileUtil::getNativeEndline();
+			result += itr->toString()+lre::FileUtils::getNativeEndline();
 		}
-		return FileUtil::putFile(filename, result);
+		return FileUtils::putFile(filename, result);
 	}
 
 	//=======================================================================================
 	bool ReplaceEngine::loadData(const std::string& filename)
 	{
-		std::string str = FileUtil::getFile(filename);
+		std::string str = FileUtils::getFile(filename);
 		
 		// Failed to read or empty file
 		if (str == "") { return false; }
@@ -394,21 +343,6 @@ namespace lre {
 		}
 
 		return (i>0);
-	}
-
-	//=======================================================================================
-	void ReplaceEngine::reportSetup()
-	{
-		std::cout<<"--- Lightweight Replace Engine: Setup ---"<<std::endl;
-		std::cout<<"Recurse directory: "<<recursive_<<std::endl;
-		std::cout<<"Remove extensions: "<<removeExtension_<<std::endl;
-		std::cout<<"Input path: "<<inputPath_<<std::endl;
-		std::cout<<"Input file pattern: "<<pattern_<<std::endl;
-		std::cout<<"Output directory: "<<outputPath_<<std::endl;
-		std::cout<<"Data path: "<<dataPath_<<std::endl;
-		std::cout<<"Data file pattern: "<<dataPattern_<<std::endl;
-		std::cout<<"Keep directory structure: "<<keepStructure_<<std::endl;
-		std::cout<<std::endl;
 	}
 
 	//=======================================================================================

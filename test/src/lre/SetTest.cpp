@@ -13,17 +13,17 @@
 
 // --- LRE --- //
 #include <lre/Set.h>
-#include <lre/FileUtil.h>
+#include <lre/FileUtils.h>
 
 class SetTest : public ::testing::Test {
   public:
 
     virtual void SetUp()
 	{
-		content_ =	"	<LRE:SET>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:description_de>Importiert eine Geometriedatei</LRE:KEY:description_de>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:description_en>Imports a geometry file</LRE:KEY:description_en>"+lre::FileUtil::getNativeEndline()+
-					"		<LRE:KEY:name>import</LRE:KEY:name>"+lre::FileUtil::getNativeEndline()+
+		content_ =	"	<LRE:SET>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:description_de>Importiert eine Geometriedatei</LRE:KEY:description_de>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:description_en>Imports a geometry file</LRE:KEY:description_en>"+lre::FileUtils::getNativeEndline()+
+					"		<LRE:KEY:name>import</LRE:KEY:name>"+lre::FileUtils::getNativeEndline()+
 					"	</LRE:SET>";
     }
     
