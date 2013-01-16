@@ -27,7 +27,13 @@
 # * (1.0.0) Stability tests
 #
 # -----------------------------------------------------------------------------
-# Change Notes LRE v.0.5.0 (upcoming release)
+# Change Notes LRE v.0.5.1 (2013-01-17), Developer Release
+# --------------------------------------------------------
+#
+# * Updated README.txt which was outdated in 0.5.0
+#
+# -----------------------------------------------------------------------------
+# Change Notes LRE v.0.5.0 (2013-01-16), Developer Release
 # --------------------------------------------------------
 #
 # * Support of gcc for Linux builds (Tested on gcc 4.6.3)
