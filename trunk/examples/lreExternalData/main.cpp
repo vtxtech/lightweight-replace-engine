@@ -20,17 +20,17 @@ int main(int argc, char** argv)
 	
 	// Ignore any command line arguments
 	// we setup everything manually here.
-	re.setInput("../data");
-	re.setOutputDirectory("./generated");
-	re.setRecursive(true);
-	re.setRemoveExtension(true);
-	re.setFilePattern("*.in");
-	re.setAppendixString("\n");
-	re.setAddAppendixAfterLastSet(false);
+	re.settings().setInput("../data");
+	re.settings().setOutputDirectory("./generated-by-lreExternalData");
+	re.settings().setRecursive(true);
+	re.settings().setRemoveExtension(true);
+	re.settings().setFilePattern("*.in");
+	re.settings().setAppendixString("\n");
+	re.settings().setAddAppendixAfterLastSet(false);
 	
 	// Define where to find our replacement data (lre::Component and lre::Set)
-	re.setDataDirectory("../data/data-multifile");
-	re.setDataPattern("*.lre");
+	re.settings().setDataDirectory("../data/data-multifile");
+	re.settings().setDataPattern("*.lre");
 
 	// Finally to the work
 	return re.run();

@@ -19,7 +19,7 @@
 
 namespace lre {
 
-	class LRE_EXPORT FileUtil {
+	class LRE_EXPORT FileUtils {
 		public:
 			static std::vector<std::string> findFiles(const std::string& path, const std::string& extension, bool recursive);
 			static std::string removeExtension(const std::string& filename);

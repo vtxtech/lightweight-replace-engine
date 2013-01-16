@@ -17,7 +17,6 @@
 # -----------------------------------------------------------------------------
 # ToDo list for upcoming releases
 # --------------------------------------------------------
-# * (0.7.0) Move settings from ReplaceEngine to separate class
 # * (0.7.0) Report invalid command arguments
 # -----------
 # * (0.9.0) Enhance documentation files
@@ -25,6 +24,12 @@
 # -----------
 # * (1.0.0) Remove warnings
 # * (1.0.0) Stability tests
+#
+# -----------------------------------------------------------------------------
+# Change Notes LRE v.0.7.0 (upcoming release)
+# --------------------------------------------------------
+#
+# * Moved settings from lre::ReplaceEngine to separate lre::Settings class
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.1 (2013-01-17), Developer Release

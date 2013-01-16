@@ -10,7 +10,7 @@
 
 #include "Set.h"
 
-#include "FileUtil.h"
+#include "FileUtils.h"
 
 //-- STL --//
 #include <iostream>
@@ -52,9 +52,9 @@ namespace lre {
 	//=======================================================================================
 	std::string Set::toString() const
 	{
-		std::string result = "\t<LRE:SET>"+lre::FileUtil::getNativeEndline();
+		std::string result = "\t<LRE:SET>"+lre::FileUtils::getNativeEndline();
 		for (StringStringMap::const_iterator itr = map_.begin(); itr != map_.end(); ++itr) {
-			result += "\t\t<LRE:KEY:"+itr->first+">"+itr->second+"</LRE:KEY:"+itr->first+">"+lre::FileUtil::getNativeEndline();
+			result += "\t\t<LRE:KEY:"+itr->first+">"+itr->second+"</LRE:KEY:"+itr->first+">"+lre::FileUtils::getNativeEndline();
 		}
 		result += "\t</LRE:SET>";
 		return result;

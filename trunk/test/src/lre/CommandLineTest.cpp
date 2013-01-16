@@ -25,31 +25,31 @@ TEST(CommandLineTest, ArgumentsCheck)
 
 	lre::ReplaceEngine re;
 	// First check the defaults here:
-	EXPECT_FALSE(re.getRecursive());
-	EXPECT_EQ("", re.getInput());
-	EXPECT_EQ("", re.getOutputDirectory());
-	EXPECT_EQ("*.in", re.getFilePattern());
-	EXPECT_TRUE(re.getRemoveExtension());
-	EXPECT_TRUE(re.getKeepSubFolders());
-	EXPECT_EQ("", re.getDataDirectory());
-	EXPECT_EQ("*.lre", re.getDataPattern());
-	EXPECT_EQ("", re.getAppendixString());
-	EXPECT_TRUE(re.getAddAppendixAfterLastSet());
+	EXPECT_FALSE(re.settings().getRecursive());
+	EXPECT_EQ("", re.settings().getInput());
+	EXPECT_EQ("", re.settings().getOutputDirectory());
+	EXPECT_EQ("*.in", re.settings().getFilePattern());
+	EXPECT_TRUE(re.settings().getRemoveExtension());
+	EXPECT_TRUE(re.settings().getKeepSubFolders());
+	EXPECT_EQ("", re.settings().getDataDirectory());
+	EXPECT_EQ("*.lre", re.settings().getDataPattern());
+	EXPECT_EQ("", re.settings().getAppendixString());
+	EXPECT_TRUE(re.settings().getAddAppendixAfterLastSet());
 
 	// Update settings from fake command arguments
 	re.init(argc, argv);
 
 	// Now check everything changed:
-	EXPECT_TRUE(re.getRecursive());
-	EXPECT_EQ("./input-path/", re.getInput());
-	EXPECT_EQ("./output-path/", re.getOutputDirectory());
-	EXPECT_EQ("*.test", re.getFilePattern());
-	EXPECT_FALSE(re.getRemoveExtension());
-	EXPECT_FALSE(re.getKeepSubFolders());
-	EXPECT_EQ("./data-path/", re.getDataDirectory());
-	EXPECT_EQ("*.data", re.getDataPattern());
-	EXPECT_EQ("foo", re.getAppendixString());
-	EXPECT_FALSE(re.getAddAppendixAfterLastSet());
+	EXPECT_TRUE(re.settings().getRecursive());
+	EXPECT_EQ("./input-path/", re.settings().getInput());
+	EXPECT_EQ("./output-path/", re.settings().getOutputDirectory());
+	EXPECT_EQ("*.test", re.settings().getFilePattern());
+	EXPECT_FALSE(re.settings().getRemoveExtension());
+	EXPECT_FALSE(re.settings().getKeepSubFolders());
+	EXPECT_EQ("./data-path/", re.settings().getDataDirectory());
+	EXPECT_EQ("*.data", re.settings().getDataPattern());
+	EXPECT_EQ("foo", re.settings().getAppendixString());
+	EXPECT_FALSE(re.settings().getAddAppendixAfterLastSet());
 
 	// Short arguments test
 	const char* argv2[] = { "lre", "-R", "-F", "-K"};
@@ -57,17 +57,17 @@ TEST(CommandLineTest, ArgumentsCheck)
 	
 	lre::ReplaceEngine re2;
 	// Again, first check the defaults:
-	EXPECT_FALSE(re2.getRecursive());
-	EXPECT_TRUE(re2.getRemoveExtension());
-	EXPECT_TRUE(re2.getKeepSubFolders());
+	EXPECT_FALSE(re2.settings().getRecursive());
+	EXPECT_TRUE(re2.settings().getRemoveExtension());
+	EXPECT_TRUE(re2.settings().getKeepSubFolders());
 
 	// Update settings from fake command arguments
 	re2.init(argc2, argv2);
 
 	// Now check everything changed:
-	EXPECT_TRUE(re2.getRecursive());
-	EXPECT_FALSE(re2.getRemoveExtension());
-	EXPECT_FALSE(re2.getKeepSubFolders());
+	EXPECT_TRUE(re2.settings().getRecursive());
+	EXPECT_FALSE(re2.settings().getRemoveExtension());
+	EXPECT_FALSE(re2.settings().getKeepSubFolders());
 }
 
 

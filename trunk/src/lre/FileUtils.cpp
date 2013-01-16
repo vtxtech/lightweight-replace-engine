@@ -8,11 +8,10 @@
  *
  */
 
-#include "FileUtil.h"
+#include "FileUtils.h"
 
 //-- OSG --//
 #include "extern/FileUtils.h"
-#include "extern/FileNameUtils.h"
 
 //-- STL --//
 #include <fstream>
@@ -20,6 +19,8 @@
 #include <algorithm>
 
 namespace lre {
+
+	static const char * const SEPARATORS = "\\/";
 
 	//=======================================================================================
 	// from http://www.codeproject.com/Articles/1088/Wildcard-string-compare-globbing
@@ -59,13 +60,13 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	bool FileUtil::makeDirectory(const std::string& path)
+	bool FileUtils::makeDirectory(const std::string& path)
 	{
 		return osgDB::makeDirectory(path);
 	}
 
 	//=======================================================================================
-	std::string FileUtil::getFile(const std::string& filename)
+	std::string FileUtils::getFile(const std::string& filename)
 	{
 		std::ifstream in(filename.c_str()/*, std::ios_base::binary*/);
 		in.exceptions(std::ios_base::badbit | std::ios_base::failbit | std::ios_base::eofbit);
@@ -73,7 +74,7 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	bool FileUtil::putFile(const std::string& filename, const std::string& text)
+	bool FileUtils::putFile(const std::string& filename, const std::string& text)
 	{
 		std::ofstream of;
 		of.open(filename.c_str());
@@ -86,15 +87,17 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	std::string FileUtil::separator()
+	std::string FileUtils::separator()
 	{
-		std::string result = "";
-		result.push_back(osgDB::getNativePathSeparator());
-		return result;
+#if defined(WIN32) && !defined(__CYGWIN__)
+    return "\\";
+#else
+    return "/";
+#endif
 	}
 
 	//=======================================================================================
-	std::string FileUtil::getNativeEndline()
+	std::string FileUtils::getNativeEndline()
 	{
 #if defined( __APPLE__ )
 		return "\r";
@@ -104,7 +107,7 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	std::vector<std::string> FileUtil::findFiles(const std::string& path, const std::string& extension, bool recursive)
+	std::vector<std::string> FileUtils::findFiles(const std::string& path, const std::string& extension, bool recursive)
 	{
 		std::vector<std::string> files; files.clear();
 
@@ -154,25 +157,44 @@ namespace lre {
 	}
 
 	//=======================================================================================
-	std::string FileUtil::removeExtension( const std::string& filename )
+	std::string FileUtils::removeExtension( const std::string& filename )
 	{
-		return osgDB::getNameLessExtension(filename);
+		std::string::size_type pos = filename.find_last_of(SEPARATORS);
+		if (pos == std::string::npos) {
+			pos = 0;
+		}
+		std::string::size_type dot_pos = filename.find_last_of(".", pos);
+		if (dot_pos == std::string::npos) {
+			return filename;
+		} else {
+			return std::string(filename, 0, dot_pos); 
+		}
 	}
 
 	//=======================================================================================
-	std::string FileUtil::extractFilename( const std::string& filename )
-	{
-		return osgDB::getSimpleFileName(filename);
+	std::string FileUtils::extractFilename( const std::string& filename )
+		{
+		std::string::size_type pos = filename.find_last_of(SEPARATORS);
+		if (pos == std::string::npos) {
+			return filename;
+		} else {
+			return std::string(filename.begin()+pos+1, filename.end());
+		}
 	}
 
 	//=======================================================================================
-	std::string FileUtil::extractDirectory( const std::string& filename )
+	std::string FileUtils::extractDirectory( const std::string& filename )
 	{
-		return osgDB::getFilePath(filename);
+		std::string::size_type pos = filename.find_last_of(SEPARATORS);
+		if (pos == std::string::npos) {
+			return std::string();
+		} else {
+			return std::string(filename, 0, pos);
+		}
 	}
 
 	//=======================================================================================
-	std::string FileUtil::excludeTrailingSeparator( const std::string& filename )
+	std::string FileUtils::excludeTrailingSeparator( const std::string& filename )
 	{
 		if (filename == "") { return filename; }
 
@@ -183,13 +205,13 @@ namespace lre {
 	}
 	
 	//=======================================================================================
-	std::string FileUtil::includeTrailingSeparator( const std::string& filename )
+	std::string FileUtils::includeTrailingSeparator( const std::string& filename )
 	{
 		return excludeTrailingSeparator(filename)+separator();
 	}
 
 	//=======================================================================================
-	std::vector<std::string> FileUtil::getDirectoryContent(const std::string& path)
+	std::vector<std::string> FileUtils::getDirectoryContent(const std::string& path)
 	{
 		std::vector<std::string> content = osgDB::getDirectoryContents(path);
 

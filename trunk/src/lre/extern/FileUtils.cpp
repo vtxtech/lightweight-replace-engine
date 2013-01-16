@@ -14,14 +14,7 @@
 // This is a stripped down version of the original OSG file
 // to be used in Lightweight Replace Engine
 
-// handle TCHAR type on various platforms
-// #ifndef is inspired by https://svn.apache.org/repos/asf/logging/log4cxx/tags/v0_9_4/include/log4cxx/helpers/tchar.h
-// defining type as plain char is from unzip.h, line 64
-
-#ifndef TCHAR
-typedef char TCHAR;
-#endif
-
+#include "FileUtils.h"
 
 // currently this impl is for _all_ platforms, except as defined.
 // the mac version will change soon to reflect the path scheme under osx, but
@@ -31,8 +24,6 @@ typedef char TCHAR;
     #include <io.h>
     #define WINBASE_DECLARE_GET_MODULE_HANDLE_EX
     #include <windows.h>
-    #include <winbase.h>
-    #include <sys/types.h>
     #include <sys/stat.h>
     #include <direct.h> // for _mkdir
 
@@ -46,47 +37,16 @@ typedef char TCHAR;
 
 #else // unix
 
-#if defined( __APPLE__ )
-    // I'm not sure how we would handle this in raw Darwin
-    // without the AvailablilityMacros.
-    #include <AvailabilityMacros.h>
-
-    //>OSG_IOS
-    //IOS includes
-    #include "TargetConditionals.h"
-
-    #if (TARGET_OS_IPHONE)
-        #include <Availability.h>
-        // workaround a bug which appears when compiling for SDK < 4.0 and for the simulator
-        #ifdef __IPHONE_4_0 && (__IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0)
-            #define stat64 stat
-        #else
-            #if !TARGET_IPHONE_SIMULATOR
-                #define stat64 stat
-            #endif
-        #endif
-    #endif
-    //<OSG_IPHONE
-
-    // 10.5 defines stat64 so we can't use this #define
-    // By default, MAC_OS_X_VERSION_MAX_ALLOWED is set to the latest
-    // system the headers know about. So I will use this as the control
-    // variable. (MIN_ALLOWED is set low by default so it is
-    // unhelpful in this case.)
-    // Unfortunately, we can't use the label MAC_OS_X_VERSION_10_4
-    // for older OS's like Jaguar, Panther since they are not defined,
-    // so I am going to hardcode the number.
-    #if (MAC_OS_X_VERSION_MAX_ALLOWED <= 1040)
-        #define stat64 stat
-    #endif
-#elif defined(__CYGWIN__) || defined(__FreeBSD__) || (defined(__hpux) && !defined(_LARGEFILE64_SOURCE))
+#if defined(__CYGWIN__) || defined(__FreeBSD__) || (defined(__hpux) && !defined(_LARGEFILE64_SOURCE))
     #define stat64 stat
 #endif
 
-    #include <stdlib.h>
-    #include <unistd.h>
-    #include <sys/types.h>
-    #include <sys/stat.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+
 #endif
 
     // set up _S_ISDIR()
@@ -97,34 +57,25 @@ typedef char TCHAR;
 #  define S_ISDIR(mode)    (mode&__S_IFDIR)
 #endif
 
-#include "FileUtils.h"
-#include "FileNameUtils.h"
-
 #include <errno.h>
-#include <string.h>
-
 #include <stack>
 #include <iostream>
 
 namespace osgDB
 {
-#ifdef OSG_USE_UTF8_FILENAME
-#define OSGDB_STRING_TO_FILENAME(s) osgDB::convertUTF8toUTF16(s)
-#define OSGDB_FILENAME_TO_STRING(s) osgDB::convertUTF16toUTF8(s)
-#define OSGDB_FILENAME_TEXT(x) L ## x
-#define OSGDB_WINDOWS_FUNCT(x) x ## W
-#define OSGDB_WINDOWS_FUNCT_STRING(x) #x "W"
-typedef wchar_t filenamechar;
-typedef std::wstring filenamestring;
-#else
 #define OSGDB_STRING_TO_FILENAME(s) s
 #define OSGDB_FILENAME_TO_STRING(s) s
 #define OSGDB_FILENAME_TEXT(x) x
 #define OSGDB_WINDOWS_FUNCT(x) x ## A
-#define OSGDB_WINDOWS_FUNCT_STRING(x) #x "A"
-typedef char filenamechar;
-typedef std::string filenamestring;
-#endif
+}
+
+static const char * const PATH_SEPARATORS = "/\\";
+
+std::string getFilePath(const std::string& fileName)
+{
+    std::string::size_type slash = fileName.find_last_of(PATH_SEPARATORS);
+    if (slash==std::string::npos) return std::string();
+    else return std::string(fileName, 0, slash);
 }
 
 bool osgDB::makeDirectory( const std::string &path )
@@ -136,11 +87,7 @@ bool osgDB::makeDirectory( const std::string &path )
     }
 
     struct stat64 stbuf;
-#ifdef OSG_USE_UTF8_FILENAME
-    if( _wstat64( OSGDB_STRING_TO_FILENAME(path).c_str(), &stbuf ) == 0 )
-#else
     if( stat64( path.c_str(), &stbuf ) == 0 )
-#endif
     {
         if( S_ISDIR(stbuf.st_mode))
             return true;
@@ -159,11 +106,7 @@ bool osgDB::makeDirectory( const std::string &path )
         if( dir.empty() )
             break;
 
-#ifdef OSG_USE_UTF8_FILENAME
-        if( _wstat64( OSGDB_STRING_TO_FILENAME(dir).c_str(), &stbuf ) < 0 )
-#else
         if( stat64( dir.c_str(), &stbuf ) < 0 )
-#endif
         {
             switch( errno )
             {
@@ -192,11 +135,7 @@ bool osgDB::makeDirectory( const std::string &path )
             }
         #endif
 
-#ifdef OSG_USE_UTF8_FILENAME
-        if ( _wmkdir(OSGDB_STRING_TO_FILENAME(dir).c_str())< 0 )
-#else
         if( mkdir( dir.c_str(), 0755 )< 0 )
-#endif
         {
             std::cout << "osgDB::makeDirectory(): "  << strerror(errno) << std::endl;
             return false;
@@ -208,25 +147,17 @@ bool osgDB::makeDirectory( const std::string &path )
 
 bool osgDB::fileExists(const std::string& filename)
 {
-#ifdef OSG_USE_UTF8_FILENAME
-    return _waccess( OSGDB_STRING_TO_FILENAME(filename).c_str(), F_OK ) == 0;
-#else
 #ifdef WIN32
     return _access( filename.c_str(), F_OK ) == 0;
 #else
 	return access( filename.c_str(), F_OK ) == 0;
-#endif
 #endif
 }
 
 osgDB::FileType osgDB::fileType(const std::string& filename)
 {
     struct stat64 fileStat;
-#ifdef OSG_USE_UTF8_FILENAME
-    if ( _wstat64(OSGDB_STRING_TO_FILENAME(filename).c_str(), &fileStat) != 0 )
-#else
     if ( stat64(filename.c_str(), &fileStat) != 0 )
-#endif
     {
         return FILE_NOT_FOUND;
     } // end if

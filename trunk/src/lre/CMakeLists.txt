@@ -22,21 +22,21 @@ ENDIF(LRE_BUILD_SHARED_LIBS)
 SET(TARGET_SRC
 	ArgumentParser.cpp
 	Component.cpp
-	FileUtil.cpp
+	FileUtils.cpp
 	ReplaceEngine.cpp
 	Set.cpp
+	Settings.cpp
 )
 SET(TARGET_H
 	ArgumentParser.h
 	Component.h
 	Export.h
-	FileUtil.h
+	FileUtils.h
 	ReplaceEngine.h
 	Set.h
+	Settings.h
 )
 SET(EXTERN_SRC
-	extern/FileNameUtils.h
-	extern/FileNameUtils.cpp
 	extern/FileUtils.h
 	extern/FileUtils.cpp
 )
