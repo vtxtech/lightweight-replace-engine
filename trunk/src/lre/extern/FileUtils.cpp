@@ -21,19 +21,14 @@
 // for now, the above include is commented out, and the below code takes precedence.
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-    #include <io.h>
     #define WINBASE_DECLARE_GET_MODULE_HANDLE_EX
     #include <windows.h>
     #include <sys/stat.h>
-    #include <direct.h> // for _mkdir
+    #include <io.h>
+    #include <direct.h>
 
     #define mkdir(x,y) _mkdir((x))
     #define stat64 _stati64
-
-    // set up for windows so acts just like unix access().
-#ifndef F_OK
-    #define F_OK 4
-#endif
 
 #else // unix
 
@@ -49,7 +44,7 @@
 
 #endif
 
-    // set up _S_ISDIR()
+// set up _S_ISDIR()
 #if !defined(S_ISDIR)
 #  if defined( _S_IFDIR) && !defined( __S_IFDIR)
 #    define __S_IFDIR _S_IFDIR
@@ -145,15 +140,6 @@ bool osgDB::makeDirectory( const std::string &path )
     return true;
 }
 
-bool osgDB::fileExists(const std::string& filename)
-{
-#ifdef WIN32
-    return _access( filename.c_str(), F_OK ) == 0;
-#else
-	return access( filename.c_str(), F_OK ) == 0;
-#endif
-}
-
 osgDB::FileType osgDB::fileType(const std::string& filename)
 {
     struct stat64 fileStat;
@@ -171,9 +157,6 @@ osgDB::FileType osgDB::fileType(const std::string& filename)
 }
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-    #include <io.h>
-    #include <direct.h>
-
     osgDB::DirectoryContents osgDB::getDirectoryContents(const std::string& dirName)
     {
         osgDB::DirectoryContents contents;
@@ -214,4 +197,4 @@ osgDB::FileType osgDB::fileType(const std::string& filename)
         return contents;
     }
 
-#endif // unix getDirectoryContexts
+#endif // unix getDirectoryContents

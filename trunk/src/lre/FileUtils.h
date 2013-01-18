@@ -31,6 +31,7 @@ namespace lre {
 			static bool makeDirectory(const std::string& path);
 			static std::string separator();
 
+			static bool fileExists(const std::string& filename);
 			static std::string getFile(const std::string& filename);
 			static bool putFile(const std::string& filename, const std::string& text);
 

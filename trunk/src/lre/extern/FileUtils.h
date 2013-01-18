@@ -27,9 +27,6 @@ namespace osgDB {
 /** Make a new directory.  Returns true if directory exists or was created. */
 extern bool makeDirectory( const std::string &directoryPath );
 
-/** return true if a file exists. */
-extern bool fileExists(const std::string& filename);
-
 enum FileType
 {
     FILE_NOT_FOUND,
