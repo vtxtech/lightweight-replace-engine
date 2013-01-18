@@ -18,6 +18,10 @@
 #include <iostream>
 #include <algorithm>
 
+#if defined(WIN32) && !defined(__CYGWIN__)
+#include <io.h>
+#endif
+
 namespace lre {
 
 	static const char * const SEPARATORS = "\\/";
@@ -68,7 +72,7 @@ namespace lre {
 	//=======================================================================================
 	std::string FileUtils::getFile(const std::string& filename)
 	{
-		std::ifstream in(filename.c_str()/*, std::ios_base::binary*/);
+		std::ifstream in(filename.c_str());
 		in.exceptions(std::ios_base::badbit | std::ios_base::failbit | std::ios_base::eofbit);
 		return std::string(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>());
 	}
@@ -106,6 +110,15 @@ namespace lre {
 #endif
 	}
 
+	bool FileUtils::fileExists(const std::string& filename)
+	{
+#ifdef WIN32
+		return _access( filename.c_str(), 4 ) == 0;
+#else
+		return access( filename.c_str(), F_OK ) == 0;
+#endif
+	}
+
 	//=======================================================================================
 	std::vector<std::string> FileUtils::findFiles(const std::string& path, const std::string& extension, bool recursive)
 	{
@@ -123,7 +136,7 @@ namespace lre {
 		std::vector<std::string> filesAndFolders = getDirectoryContent(path);
 		for (unsigned int i = 0; i < filesAndFolders.size(); ++i) {
 			std::string name = path+separator()+filesAndFolders.at(i);
-			if (osgDB::fileExists(name)) {
+			if (fileExists(name)) {
 				if (osgDB::fileType(name) == osgDB::DIRECTORY) {
 					if (recursive) {
 #ifdef _DEBUG
