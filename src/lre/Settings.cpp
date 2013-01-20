@@ -83,7 +83,7 @@ namespace lre {
 		ap.read("--dataPattern", dataPattern_);
 		ap.read("--appendix", appendix_);
 
-		return 0;
+		return ap.reportUnusedArguments();
 	}
 
 	//=======================================================================================

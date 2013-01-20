@@ -27,6 +27,7 @@
 namespace lre {
 
 	typedef std::deque<std::string> StringDeque;
+	typedef std::deque<bool> BoolDeque;
 	typedef std::map<std::string, std::string> StringStringMap;
 	typedef std::pair<std::string, std::string> StringStringPair;
 
@@ -55,10 +56,6 @@ namespace lre {
 			// @param description The description of the parameter
 			void addCommandLineOption(const std::string& argument, const std::string& description);
 
-			// Report the command line options added using addCommandLineOption
-			// on the command line (std::cout)
-			void reportOptions();
-
 			// Read the parameter to string
 			// @return false if not set or no parameter following. True on success
 			bool read(const std::string& optionName, std::string& value);
@@ -75,8 +72,19 @@ namespace lre {
 			// @return Number of arguments given in commandline.
 			int getArgumentCount() { return arguments_.size(); }
 
+			// Prints unused (usually invalid) arguments to command line
+			// @return Number of unused arguments
+			int reportUnusedArguments();
+
+			// Report the command line options added using addCommandLineOption
+			// on the command line (std::cout)
+			// Use this for displaying command line help, e.g. --help or -?
+			void reportOptions();
+
 		private:
 			StringDeque arguments_;
+			BoolDeque argumentUsed_;
+			BoolDeque argumentMissingParameter_;
 			StringStringMap options_;
 			std::string appName_;
 			std::string appUsage_;

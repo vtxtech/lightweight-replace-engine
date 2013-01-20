@@ -17,8 +17,6 @@
 # -----------------------------------------------------------------------------
 # ToDo list for upcoming releases
 # --------------------------------------------------------
-# * (0.7.0) Report invalid command arguments
-# -----------
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
 # -----------
@@ -26,10 +24,11 @@
 # * (1.0.0) Stability tests
 #
 # -----------------------------------------------------------------------------
-# Change Notes LRE v.0.7.0 (upcoming release)
+# Change Notes LRE v.0.7.0 (2013-01-20), Developer Release
 # --------------------------------------------------------
 #
 # * Moved settings from lre::ReplaceEngine to separate lre::Settings class
+# * Argument parser now reports invalid command arguments and missing parameters
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.5.1 (2013-01-17), Developer Release
@@ -61,5 +60,6 @@
 # --------------------------------------------------------
 #
 # * First release
+# * Base functionality running
 #
 # -----------------------------------------------------------------------------
