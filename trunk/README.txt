@@ -19,8 +19,10 @@
 # --------------------------------------------------------
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
+# * (0.9.0) Refactor lre::ArgumentParser's internal data structures
+# * (0.9.0) Tidy up output of lre::ArgumentParser::reportOptions()
 # -----------
-# * (1.0.0) Remove warnings
+# * (1.0.0) Remove any warnings (compiling with default compiler flags)
 # * (1.0.0) Stability tests
 #
 # -----------------------------------------------------------------------------

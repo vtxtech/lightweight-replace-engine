@@ -104,6 +104,7 @@ namespace lre {
 	{
 		if (appName_ != "") { std::cout<<appName_<<std::endl; }
 		if (appUsage_ != "") { std::cout<<"Usage: "<<lre::FileUtils::extractFilename(arguments_.at(0))<<" "<<appUsage_<<std::endl; }
+
 		for (StringStringMap::iterator itr = options_.begin(); itr != options_.end(); ++itr) {
 			std::cout<<itr->first<<":"<<std::endl;
 			std::cout<<itr->second<<std::endl<<std::endl;
