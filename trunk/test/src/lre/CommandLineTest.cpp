@@ -37,7 +37,7 @@ TEST(CommandLineTest, ArgumentsCheck)
 	EXPECT_TRUE(re.settings().getAddAppendixAfterLastSet());
 
 	// Update settings from fake command arguments
-	re.init(argc, argv);
+	EXPECT_EQ(0, re.init(argc, argv));
 
 	// Now check everything changed:
 	EXPECT_TRUE(re.settings().getRecursive());
@@ -62,12 +62,18 @@ TEST(CommandLineTest, ArgumentsCheck)
 	EXPECT_TRUE(re2.settings().getKeepSubFolders());
 
 	// Update settings from fake command arguments
-	re2.init(argc2, argv2);
+	EXPECT_EQ(0, re2.init(argc2, argv2));
 
 	// Now check everything changed:
 	EXPECT_TRUE(re2.settings().getRecursive());
 	EXPECT_FALSE(re2.settings().getRemoveExtension());
 	EXPECT_FALSE(re2.settings().getKeepSubFolders());
+
+	// Invalid arguments test
+	const char* argv3[] = { "lre", "--recursive", "unused_file.dat", "--invalid_option", "--another-invalid-option", "invalid-argument.file", "--input", "bla"};
+	int   argc3   = sizeof(argv3) / sizeof(argv3[0]);
+
+	EXPECT_EQ(4, re2.init(argc3, argv3));
 }
 
 
