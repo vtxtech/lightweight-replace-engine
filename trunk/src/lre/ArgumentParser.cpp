@@ -22,12 +22,8 @@ namespace lre {
 	{
 		const char** tmp = argv;
 		arguments_.clear();
-		argumentUsed_.clear();
-		argumentMissingParameter_.clear();
 		for (int i = 0; i < argc; ++i) {
-			arguments_.push_back(std::string(*tmp));
-			argumentUsed_.push_back(false);
-			argumentMissingParameter_.push_back(false);
+			arguments_.push_back(Argument(std::string(*tmp)));
 			tmp++;
 		}
 	}
@@ -37,12 +33,8 @@ namespace lre {
 	{
 		char** tmp = argv;
 		arguments_.clear();
-		argumentUsed_.clear();
-		argumentMissingParameter_.clear();
 		for (int i = 0; i < argc; ++i) {
-			arguments_.push_back(std::string(*tmp));
-			argumentUsed_.push_back(false);
-			argumentMissingParameter_.push_back(false);
+			arguments_.push_back(Argument(std::string(*tmp)));
 			tmp++;
 		}
 	}
@@ -57,15 +49,15 @@ namespace lre {
 	bool ArgumentParser::read(const std::string& optionName, std::string& value)
 	{
 		for (unsigned int i = 0; i < arguments_.size(); ++i) {
-			if (arguments_.at(i) == optionName) {
-				argumentUsed_.at(i) = true;
+			if (arguments_.at(i).arg == optionName) {
+				arguments_.at(i).used = true;
 				++i;
-				if (i < arguments_.size() && !isOption(arguments_.at(i))) {
-					argumentUsed_.at(i) = true;
-					value = arguments_.at(i);
+				if (i < arguments_.size() && !isOption(arguments_.at(i).arg)) {
+					arguments_.at(i).used = true;
+					value = arguments_.at(i).arg;
 					return true;
 				} else {
-					argumentMissingParameter_.at(i-1) = true;
+					arguments_.at(i-1).missingParameter = true;
 				}
 			}
 		}
@@ -75,13 +67,11 @@ namespace lre {
 	//=======================================================================================
 	bool ArgumentParser::isSet(const std::string& optionName)
 	{
-		BoolDeque::iterator used = argumentUsed_.begin();
-		for (StringDeque::iterator itr = arguments_.begin(); itr != arguments_.end(); ++itr) {
-			if (*itr == optionName) {
-				(*used) = true;
+		for (ArgumentDeque::iterator itr = arguments_.begin(); itr != arguments_.end(); ++itr) {
+			if (itr->arg == optionName) {
+				itr->used = true;
 				return true;
 			}
-			++used;
 		}
 		return false;
 	}
@@ -121,7 +111,7 @@ namespace lre {
 	void ArgumentParser::reportOptions()
 	{
 		if (appName_ != "") { std::cout<<appName_<<std::endl; }
-		if (appUsage_ != "") { std::cout<<"Usage: "<<lre::FileUtils::extractFilename(arguments_.at(0))<<" "<<appUsage_<<std::endl<<std::endl; }
+		if (appUsage_ != "") { std::cout<<"Usage: "<<lre::FileUtils::extractFilename(arguments_.at(0).arg)<<" "<<appUsage_<<std::endl<<std::endl; }
 
 		int terminalWidth = 80;
 		int leftColumnWidth = 5;
@@ -178,15 +168,13 @@ namespace lre {
 	int ArgumentParser::reportUnusedArguments()
 	{
 		int failedCount = 0;
-		for (unsigned int i = 1; i < argumentUsed_.size(); ++i) {
-			if (!argumentUsed_.at(i)) {
-				std::cout<<"Invalid option '"<<arguments_.at(i)<<"'."<<std::endl;
+		for (unsigned int i = 1; i < arguments_.size(); ++i) {
+			if (!arguments_.at(i).used) {
+				std::cout<<"Invalid option '"<<arguments_.at(i).arg<<"'."<<std::endl;
 				failedCount++;
 			}
-		}
-		for (unsigned int i = 1; i < argumentMissingParameter_.size(); ++i) {
-			if (argumentMissingParameter_.at(i)) {
-				std::cout<<"Option '"<<arguments_.at(i)<<"' missing a parameter."<<std::endl;
+			if (arguments_.at(i).missingParameter) {
+				std::cout<<"Option '"<<arguments_.at(i).arg<<"' missing a parameter."<<std::endl;
 				failedCount++;
 			}
 		}

@@ -26,10 +26,23 @@
 
 namespace lre {
 
-	typedef std::deque<std::string> StringDeque;
-	typedef std::deque<bool> BoolDeque;
 	typedef std::map<std::string, std::string> StringStringMap;
 	typedef std::pair<std::string, std::string> StringStringPair;
+
+	struct Argument {
+		Argument(const std::string& argument)
+		{
+			arg = argument;
+			used = false;
+			missingParameter = false;
+		}
+
+		std::string arg;
+		bool used;
+		bool missingParameter;
+	};
+
+	typedef std::deque<Argument> ArgumentDeque;
 
 	// A lightweight command line argument parser
 	class LRE_EXPORT ArgumentParser {
@@ -82,9 +95,7 @@ namespace lre {
 			void reportOptions();
 
 		private:
-			StringDeque arguments_;
-			BoolDeque argumentUsed_;
-			BoolDeque argumentMissingParameter_;
+			ArgumentDeque arguments_;
 			StringStringMap options_;
 			std::string appName_;
 			std::string appUsage_;

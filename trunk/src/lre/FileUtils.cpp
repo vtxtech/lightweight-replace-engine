@@ -172,11 +172,7 @@ namespace lre {
 	//=======================================================================================
 	std::string FileUtils::removeExtension( const std::string& filename )
 	{
-		std::string::size_type pos = filename.find_last_of(SEPARATORS);
-		if (pos == std::string::npos) {
-			pos = 0;
-		}
-		std::string::size_type dot_pos = filename.find_last_of(".", pos);
+		std::string::size_type dot_pos = filename.find_last_of(".");
 		if (dot_pos == std::string::npos) {
 			return filename;
 		} else {
