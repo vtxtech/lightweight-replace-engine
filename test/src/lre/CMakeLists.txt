@@ -11,6 +11,7 @@ SET(TARGET_SRC
     CommandLineTest.cpp
     ComponentTest.cpp
     FileIOTest.cpp
+    FileUtilsTest.cpp
     SetTest.cpp
 )
 

@@ -21,7 +21,7 @@ namespace lre {
 
 	class LRE_EXPORT FileUtils {
 		public:
-			static std::vector<std::string> findFiles(const std::string& path, const std::string& extension, bool recursive);
+			// Filename related utils
 			static std::string removeExtension(const std::string& filename);
 			static std::string extractFilename(const std::string& filename);
 			static std::string extractDirectory(const std::string& filename);
@@ -31,6 +31,8 @@ namespace lre {
 			static bool makeDirectory(const std::string& path);
 			static std::string separator();
 
+			// File related utils
+			static std::vector<std::string> findFiles(const std::string& path, const std::string& extension, bool recursive);
 			static bool fileExists(const std::string& filename);
 			static std::string getFile(const std::string& filename);
 			static bool putFile(const std::string& filename, const std::string& text);
