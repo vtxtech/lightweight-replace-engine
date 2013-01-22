@@ -17,6 +17,7 @@
 # -----------------------------------------------------------------------------
 # ToDo list for upcoming releases
 # --------------------------------------------------------
+# * (0.9.0) Fix Windows 64 tests fail
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
 # * (0.9.0) Refactor lre::ArgumentParser's internal data structures
