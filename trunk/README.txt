@@ -20,10 +20,15 @@
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
 # * (0.9.0) Refactor lre::ArgumentParser's internal data structures
-# * (0.9.0) Tidy up output of lre::ArgumentParser::reportOptions()
 # -----------
 # * (1.0.0) Remove any warnings (compiling with default compiler flags)
 # * (1.0.0) Stability tests
+#
+# -----------------------------------------------------------------------------
+# Change Notes LRE v.0.9.0 upcoming release
+# --------------------------------------------------------
+#
+# * Formatting of lre::ArgumentParser::reportOptions()
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.7.0 (2013-01-20), Developer Release

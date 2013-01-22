@@ -50,7 +50,7 @@ namespace lre {
 		ap.addCommandLineOption("--input <path or filename>", "Sets the input path or filename. Required option.");
 		ap.addCommandLineOption("--output <path>", "Sets the output path. Required option.");
 		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
-		ap.addCommandLineOption("--data <path or filename>", "Data file containg Components or path to multiple files matching --dataPattern. Empty by default. Required option, if no data is defined in source code, only.");
+		ap.addCommandLineOption("--data <path or filename>", "Data file containg Components or path to multiple files matching --dataPattern <file_pattern>. Empty by default. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
 		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
