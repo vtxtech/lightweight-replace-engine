@@ -26,27 +26,28 @@
 
 namespace lre {
 
-	typedef std::map<std::string, std::string> StringStringMap;
-	typedef std::pair<std::string, std::string> StringStringPair;
-
-	struct Argument {
-		Argument(const std::string& argument)
-		{
-			arg = argument;
-			used = false;
-			missingParameter = false;
-		}
-
-		std::string arg;
-		bool used;
-		bool missingParameter;
-	};
-
-	typedef std::deque<Argument> ArgumentDeque;
-
 	// A lightweight command line argument parser
 	class LRE_EXPORT ArgumentParser {
 		public:
+			// Internally used data types
+			typedef std::map<std::string, std::string> StringStringMap;
+			typedef std::pair<std::string, std::string> StringStringPair;
+
+			struct Argument {
+				Argument(const std::string& argument)
+				{
+					arg = argument;
+					used = false;
+					missingParameter = false;
+				}
+
+				std::string arg;
+				bool used;
+				bool missingParameter;
+			};
+
+			typedef std::deque<Argument> ArgumentDeque;
+
 			// Parameter constructor with const char**
 			ArgumentParser(int argc, const char** argv);
 
