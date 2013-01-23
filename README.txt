@@ -17,7 +17,7 @@
 # -----------------------------------------------------------------------------
 # ToDo list for upcoming releases
 # --------------------------------------------------------
-# * (0.9.0) Fix Windows 64 tests fail
+# * (0.9.0) Fix some tests failing which were compiled to Windows x64 targets
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
 # -----------
