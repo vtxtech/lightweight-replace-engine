@@ -73,6 +73,20 @@ std::string getFilePath(const std::string& fileName)
     else return std::string(fileName, 0, slash);
 }
 
+#ifdef WIN32
+	std::string strerror_ext()
+	{
+		char buff[256];
+		strerror_s(buff, 256, errno);
+		return std::string(buff);
+	}
+#else
+	std::string strerror_ext()
+	{
+		return std::string(strerror(errno));
+	}
+#endif
+
 bool osgDB::makeDirectory( const std::string &path )
 {
     if (path.empty())
@@ -111,7 +125,7 @@ bool osgDB::makeDirectory( const std::string &path )
                     break;
 
                 default:
-                    std::cout << "osgDB::makeDirectory(): "  << strerror(errno) << std::endl;
+                    std::cout << "osgDB::makeDirectory(): "  << strerror_ext() << std::endl;
                     return false;
             }
         }
@@ -132,7 +146,7 @@ bool osgDB::makeDirectory( const std::string &path )
 
         if( mkdir( dir.c_str(), 0755 )< 0 )
         {
-            std::cout << "osgDB::makeDirectory(): "  << strerror(errno) << std::endl;
+            std::cout << "osgDB::makeDirectory(): "  << strerror_ext() << std::endl;
             return false;
         }
         paths.pop();
