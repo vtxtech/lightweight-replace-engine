@@ -28,10 +28,10 @@ namespace lre {
 			static std::string excludeTrailingSeparator(const std::string& filename);
 			static std::string includeTrailingSeparator(const std::string& filename);
 			static std::string getNativeEndline();
-			static bool makeDirectory(const std::string& path);
 			static std::string separator();
 
 			// File related utils
+			static bool makeDirectory(const std::string& path);
 			static std::vector<std::string> findFiles(const std::string& path, const std::string& extension, bool recursive);
 			static bool fileExists(const std::string& filename);
 			static std::string getFile(const std::string& filename);
