@@ -55,8 +55,31 @@ TEST_F(FileUtilsTest, FileNames)
 
 TEST_F(FileUtilsTest, Files)
 {
-	// lre::FileUtils::findFiles
-	// lre::FileUtils::fileExists
-	// lre::FileUtils::getFile
-	// lre::FileUtils::putFile
+	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/another-folder"));
+	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder"));
+	EXPECT_FALSE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/another-folder/"));
+	EXPECT_FALSE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/"));
+
+	EXPECT_TRUE(lre::FileUtils::fileExists("./created-by-test/subfolder/"));
+	EXPECT_FALSE(lre::FileUtils::fileExists("./created-by-test/subfolder/xx/"));
+
+	EXPECT_FALSE(lre::FileUtils::putFile("./created-by-test/subfolder/xx/some.file", "some text"));
+	EXPECT_TRUE(lre::FileUtils::putFile("./created-by-test/my.file", "some text"));
+	EXPECT_TRUE(lre::FileUtils::putFile("./created-by-test/subfolder/another.file", "some text"));
+	EXPECT_TRUE(lre::FileUtils::putFile("./created-by-test/subfolder/file.other", "some text"));
+	EXPECT_EQ("some text", lre::FileUtils::getFile("./created-by-test/my.file"));
+
+	std::vector<std::string> files = lre::FileUtils::findFiles("./created-by-test", "*.file", true);
+	ASSERT_EQ(2, files.size());
+	EXPECT_EQ("my.file", lre::FileUtils::extractFilename(files.at(0)));
+	EXPECT_EQ("another.file", lre::FileUtils::extractFilename(files.at(1)));
+	files = lre::FileUtils::findFiles("./created-by-test", "*.file", false);
+	ASSERT_EQ(1, files.size());
+	EXPECT_EQ("my.file", lre::FileUtils::extractFilename(files.at(0)));
+	files = lre::FileUtils::findFiles("./created-by-test", "*.*", true);
+	ASSERT_EQ(3, files.size());
+	EXPECT_EQ("my.file", lre::FileUtils::extractFilename(files.at(0)));
+	EXPECT_EQ("another.file", lre::FileUtils::extractFilename(files.at(1)));
+	EXPECT_EQ("file.other", lre::FileUtils::extractFilename(files.at(2)));
+
 }

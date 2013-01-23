@@ -20,7 +20,6 @@
 # * (0.9.0) Fix Windows 64 tests fail
 # * (0.9.0) Enhance documentation files
 # * (0.9.0) Remove any OpenSceneGraph code
-# * (0.9.0) Add tests for file related utils in FileUtils.h
 # -----------
 # * (1.0.0) Remove any warnings (compiling with default compiler flags)
 # * (1.0.0) Stability tests
