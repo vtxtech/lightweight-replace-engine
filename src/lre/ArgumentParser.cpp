@@ -14,6 +14,7 @@
 
 //-- STL --//
 #include <iostream>
+#include <assert.h>
 
 namespace lre {
 
@@ -94,7 +95,7 @@ namespace lre {
 		Right
 	};
 
-	std::string fill(const std::string& input, int targetWidth, FillSide side)
+	std::string fill(const std::string& input, std::string::size_type targetWidth, FillSide side)
 	{
 		std::string output = input;
 		while (output.size() < targetWidth) {
@@ -113,9 +114,10 @@ namespace lre {
 		if (appName_ != "") { std::cout<<appName_<<std::endl; }
 		if (appUsage_ != "") { std::cout<<"Usage: "<<lre::FileUtils::extractFilename(arguments_.at(0).arg)<<" "<<appUsage_<<std::endl<<std::endl; }
 
-		int terminalWidth = 80;
-		int leftColumnWidth = 5;
-		int rightColumnWidth = terminalWidth - leftColumnWidth;
+		std::string::size_type terminalWidth = 80;
+		std::string::size_type leftColumnWidth = 5;
+		assert(terminalWidth > leftColumnWidth);
+		std::string::size_type rightColumnWidth = terminalWidth - leftColumnWidth;
 
 		for (StringStringMap::iterator itr = options_.begin(); itr != options_.end(); ++itr) {
 			// print option, e.g. --input <foo>
