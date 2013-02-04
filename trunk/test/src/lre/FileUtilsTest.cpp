@@ -14,6 +14,9 @@
 // --- LRE --- //
 #include <lre/FileUtils.h>
 
+// --- STL --- //
+#include <algorithm>
+
 class FileUtilsTest : public ::testing::Test {
   public:
 
@@ -30,6 +33,8 @@ class FileUtilsTest : public ::testing::Test {
 	std::string stdInput_;
 
 };
+
+bool myfunction (const std::string& a, const std::string& b) { return (a<b); }
 
 TEST_F(FileUtilsTest, FileNames)
 {
@@ -57,8 +62,10 @@ TEST_F(FileUtilsTest, Files)
 {
 	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/another-folder"));
 	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder"));
-	EXPECT_FALSE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/another-folder/"));
-	EXPECT_FALSE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/"));
+	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/another-folder/"));
+	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/"));
+	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder/another-folder\\"));
+	EXPECT_TRUE(lre::FileUtils::makeDirectory("./created-by-test/subfolder\\"));
 
 	EXPECT_TRUE(lre::FileUtils::fileExists("./created-by-test/subfolder/"));
 	EXPECT_FALSE(lre::FileUtils::fileExists("./created-by-test/subfolder/xx/"));
@@ -70,13 +77,16 @@ TEST_F(FileUtilsTest, Files)
 	EXPECT_EQ("some text", lre::FileUtils::getFile("./created-by-test/my.file"));
 
 	std::vector<std::string> files = lre::FileUtils::findFiles("./created-by-test", "*.file", true);
+	std::sort(files.begin(), files.end(), myfunction); // sort files to avoid system dependend results of tests
 	ASSERT_EQ(2, files.size());
 	EXPECT_EQ("my.file", lre::FileUtils::extractFilename(files.at(0)));
 	EXPECT_EQ("another.file", lre::FileUtils::extractFilename(files.at(1)));
 	files = lre::FileUtils::findFiles("./created-by-test", "*.file", false);
+	std::sort(files.begin(), files.end(), myfunction); // sort files to avoid system dependend results of tests
 	ASSERT_EQ(1, files.size());
 	EXPECT_EQ("my.file", lre::FileUtils::extractFilename(files.at(0)));
 	files = lre::FileUtils::findFiles("./created-by-test", "*.*", true);
+	std::sort(files.begin(), files.end(), myfunction); // sort files to avoid system dependend results of tests
 	ASSERT_EQ(3, files.size());
 	EXPECT_EQ("my.file", lre::FileUtils::extractFilename(files.at(0)));
 	EXPECT_EQ("another.file", lre::FileUtils::extractFilename(files.at(1)));
