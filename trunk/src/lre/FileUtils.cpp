@@ -66,7 +66,7 @@ namespace lre {
 	//=======================================================================================
 	bool FileUtils::makeDirectory(const std::string& path)
 	{
-		return osgDB::makeDirectory(path);
+		return osgDB::makeDirectory(lre::FileUtils::excludeTrailingSeparator(path));
 	}
 
 	//=======================================================================================
