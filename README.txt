@@ -17,7 +17,6 @@
 # -----------------------------------------------------------------------------
 # ToDo list for upcoming releases
 # --------------------------------------------------------
-# * (1.0.0) Fix some tests failing which were compiled to Windows x64 targets
 # * (1.0.0) Remove any warnings (compiling with default compiler flags)
 # * (1.0.0) Stability tests
 #
@@ -29,6 +28,7 @@
 # * Refactored lre::ArgumentParser's internal data structures
 # * Fixed FileUtils::removeExtension occasionally returning an empty string
 # * Added tests for FileUtils.h
+# * Fixed int64 issues on x64 targets
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.7.0 (2013-01-20), Developer Release
