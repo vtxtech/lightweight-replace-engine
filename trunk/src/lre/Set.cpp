@@ -69,8 +69,8 @@ namespace lre {
 		std::string keyTagBegin1 = "<LRE:KEY:";	std::string keyTagBegin2 = ">";
 		std::string keyTagEnd1 = "</LRE:KEY:"; std::string keyTagEnd2 = ">";
 
-		unsigned int f = 0; // the current string position
-		unsigned int e = 0; // position of the end of the set
+		std::string::size_type f = 0; // the current string position
+		std::string::size_type e = 0; // position of the end of the set
 		unsigned int i = 0; // number of keys found inside the set
 
 		f = str.find(setTagBegin, f);
@@ -101,7 +101,7 @@ namespace lre {
 			f += keyTagBegin1.size();
 
 			// Determine the KEY
-			unsigned int keyPos = str.find(keyTagBegin2, f);
+			std::string::size_type keyPos = str.find(keyTagBegin2, f);
 			// Missing ">"
 			if (keyPos == std::string::npos || keyPos >= e) { return false; }
 

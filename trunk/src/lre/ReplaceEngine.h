@@ -50,7 +50,7 @@ namespace lre {
 
 			// Public accessor for number of components
 			// @return Number of components defined during runtime by calling addComponent(name)
-			unsigned int getNumComponents() const { return componentList_.size(); }
+			lre::ComponentList::size_type getNumComponents() const { return componentList_.size(); }
 
 			// Get a component by its name.
 			// @return Component* if found, otherwise NULL

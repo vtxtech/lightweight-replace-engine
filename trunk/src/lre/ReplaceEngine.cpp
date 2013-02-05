@@ -186,24 +186,24 @@ namespace lre {
 		std::string keywordComponent = "COMPONENT";
 		std::string keywordKey = "KEY";
 
-		unsigned int pos = 0;
+		std::string::size_type pos = 0;
 		std::string compStart = keywordBegin+keywordSeparator+keywordComponent+keywordSeparator;
 		std::string comp = compStart;
-		unsigned int f = source.find(comp, pos);
+		std::string::size_type f = source.find(comp, pos);
 		if (f == std::string::npos) {
 			std::cout<<"Nothing to be done. "; std::cout.flush();
 		}
 		// Process 'COMPONENT's
 		while (f != std::string::npos) {
-			unsigned int compStartIndex = f;
-			unsigned int f2 = source.find(keywordEndTag, f);
+			std::string::size_type compStartIndex = f;
+			std::string::size_type f2 = source.find(keywordEndTag, f);
 			if (f2 == std::string::npos) {
 				std::cout<<"Unclosed "<<comp<<"-tag. "; std::cout.flush();
 				return false;
 			}
 			std::string componentName = source.substr(f+comp.size(), f2-f-comp.size());
 			pos = f2 + keywordEndTag.size();
-			unsigned int dataStart = pos;
+			std::string::size_type dataStart = pos;
 			std::cout<<"Component: "<<componentName<<" "; std::cout.flush();
 			comp = keywordEnd+keywordSeparator+keywordComponent+keywordSeparator+componentName+keywordEndTag;
 			f = source.find(comp, pos);
@@ -212,8 +212,8 @@ namespace lre {
 				return false;
 			}
 			pos = f+comp.size();
-			unsigned int dataEnd = f;
-			unsigned int compEndIndex = dataEnd+comp.size();
+			std::string::size_type dataEnd = f;
+			std::string::size_type compEndIndex = dataEnd+comp.size();
 			Component* compData = getComponent(componentName);
 			if (compData == NULL) {
 				std::cout<<"undefined! "<<std::endl;
@@ -236,18 +236,18 @@ namespace lre {
 				std::cout<<"\""<<data<<"\""<<std::endl;
 				std::cout<<" --- End of data --- "<<std::endl;
 
-				unsigned int keyPos = 0;
+				std::string::size_type keyPos = 0;
 				std::string key = keywordBegin+keywordSeparator+keywordKey+keywordSeparator;
 				keyPos = data.find(key, keyPos);
 
 				// Process 'KEY's
 				while (keyPos != std::string::npos) {
-					unsigned int keyPos2 = data.find(keywordEndTag, keyPos);
+					std::string::size_type keyPos2 = data.find(keywordEndTag, keyPos);
 					if (keyPos2 == std::string::npos) {
 						std::cout<<"Unclosed "<<key<<"-tag. "; std::cout.flush();
 						return false;
 					}
-					unsigned int keyPosEnd = keyPos2+keywordEndTag.size();
+					std::string::size_type keyPosEnd = keyPos2+keywordEndTag.size();
 					std::string keyName = data.substr(keyPos+key.size(), keyPos2-keyPos-key.size());
 					std::cout<<"Key: '"<<keyName<<"' "; std::cout.flush();
 					std::cout<<"Compl. entry: '"<<data.substr(keyPos, keyPosEnd-keyPos)<<"' "; std::cout.flush();
@@ -298,9 +298,9 @@ namespace lre {
 		std::string compTagBegin1 = "<LRE:COMPONENT:"; std::string compTagBegin2 = ">";
 		std::string compTagEnd1 = "</LRE:COMPONENT:"; std::string compTagEnd2 = ">";
 
-		unsigned int f = 0; // the current string position
-		unsigned int s = 0; // position of the start of the component
-		unsigned int e = 0; // position of the end of the component
+		std::string::size_type f = 0; // the current string position
+		std::string::size_type s = 0; // position of the start of the component
+		std::string::size_type e = 0; // position of the end of the component
 		unsigned int i = 0; // number of components found inside the file
 
 		while (f != std::string::npos) {
@@ -317,7 +317,7 @@ namespace lre {
 			}
 			f += compTagBegin1.size();
 
-			unsigned int namePos = str.find(compTagBegin2, f);
+			std::string::size_type namePos = str.find(compTagBegin2, f);
 			// Component ">" missing
 			if (namePos == std::string::npos) { return false; }
 

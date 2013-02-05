@@ -84,7 +84,7 @@ namespace lre {
 
 			// Returns the number of arguments given, actually a copy of argc
 			// @return Number of arguments given in commandline.
-			int getArgumentCount() { return arguments_.size(); }
+			lre::ArgumentParser::ArgumentDeque::size_type getArgumentCount() { return arguments_.size(); }
 
 			// Prints unused (usually invalid) arguments to command line
 			// @return Number of unused arguments
