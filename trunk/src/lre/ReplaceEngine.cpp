@@ -112,12 +112,7 @@ namespace lre {
 #endif
 		std::cout<<"--- Source files matching pattern ---"<<std::endl;
 		for (unsigned int i = 0; i < files.size(); ++i) {
-			std::cout<<"FILE("<<i<<"): "<<files.at(i)<<"... "<<std::flush;
-			if (processFile(files.at(i), makeTargetFilename(files.at(i)))) {
-				std::cout<<"Success."<<std::endl;
-			} else {
-				std::cout<<"Failed."<<std::endl;
-			}
+			processFile(files.at(i), makeTargetFilename(files.at(i)));
 		}
 
 		// Restore componentList_ from backup before file loading
@@ -129,7 +124,7 @@ namespace lre {
 	//=======================================================================================
 	std::string ReplaceEngine::makeTargetFilename(const std::string& source_filename) const
 	{
-		std::cout<<"target file..."<<std::endl;
+		//std::cout<<"target file..."<<std::endl;
 		std::string result = source_filename;
 		// Settings for consideration
 		// * bool settings().getRemoveExtension();
@@ -144,9 +139,9 @@ namespace lre {
 		if (osgDB::fileType(outputPath) == osgDB::REGULAR_FILE) {
 			outputPath = FileUtils::extractDirectory(outputPath);
 		}
-		std::cout<<"outputPath="<<outputPath<<std::endl;
-		std::cout<<"inputPath="<<inputPath<<std::endl;
-		std::cout<<"source_filename="<<source_filename<<std::endl;
+		//std::cout<<"outputPath="<<outputPath<<std::endl;
+		//std::cout<<"inputPath="<<inputPath<<std::endl;
+		//std::cout<<"source_filename="<<source_filename<<std::endl;
 		if (!settings().getKeepSubFolders()) {
 			// Output straight into the target folder
 			result = outputPath + FileUtils::separator() + FileUtils::extractFilename(result);
@@ -170,7 +165,9 @@ namespace lre {
 	//=======================================================================================
 	bool ReplaceEngine::processFile(const std::string& source_filename, const std::string& target_filename)
 	{
-		std::cout<<"Processing..."<<std::endl;
+		//std::cout<<"Processing..."<<std::endl;
+		std::cout<<"In: "<<source_filename<<std::endl;
+		std::cout<<"Out: "<<target_filename<<std::endl;
 		// Make a directory for the file, if it does not exist. makeDirectory
 		// returns true if successfully created or already existing.
 		if (!FileUtils::makeDirectory(FileUtils::extractDirectory(target_filename))) {
@@ -191,7 +188,8 @@ namespace lre {
 		std::string comp = compStart;
 		std::string::size_type f = source.find(comp, pos);
 		if (f == std::string::npos) {
-			std::cout<<"Nothing to be done. "; std::cout.flush();
+			std::cout<<"Nothing to be done."<<std::endl<<std::endl;
+			return true;
 		}
 		// Process 'COMPONENT's
 		while (f != std::string::npos) {
@@ -204,7 +202,7 @@ namespace lre {
 			std::string componentName = source.substr(f+comp.size(), f2-f-comp.size());
 			pos = f2 + keywordEndTag.size();
 			std::string::size_type dataStart = pos;
-			std::cout<<"Component: "<<componentName<<" "; std::cout.flush();
+			std::cout<<"Component: \""<<componentName<<"\""<<std::flush;
 			comp = keywordEnd+keywordSeparator+keywordComponent+keywordSeparator+componentName+keywordEndTag;
 			f = source.find(comp, pos);
 			if (f == std::string::npos) {
@@ -213,6 +211,7 @@ namespace lre {
 			}
 			pos = f+comp.size();
 			std::string::size_type dataEnd = f;
+			std::cout<<" from "<<dataStart<<" to "<<dataEnd<<std::endl;
 			std::string::size_type compEndIndex = dataEnd+comp.size();
 			Component* compData = getComponent(componentName);
 			if (compData == NULL) {
@@ -222,6 +221,11 @@ namespace lre {
 				continue;
 			}
 
+			std::string data = source.substr(dataStart, dataEnd-dataStart);
+			std::cout<<" --- Data --- "<<std::endl;
+			std::cout<<"\""<<data<<"\""<<std::endl;
+			std::cout<<" --- End of data --- "<<std::endl;
+
 			std::string resultData = "";
 
 			for (unsigned int setNumber = 0; setNumber < compData->getNumSets(); ++setNumber) {
@@ -230,12 +234,9 @@ namespace lre {
 					std::cout<<" --- Failed to get Set no. "<<setNumber<<" --- "<<std::endl;
 					continue;
 				}
+				std::cout<<" --- Set #"<<setNumber+1<<" --- "<<std::endl;
 
-				std::string data = source.substr(dataStart, dataEnd-dataStart);
-				std::cout<<std::endl<<" --- Data --- "<<std::endl;
-				std::cout<<"\""<<data<<"\""<<std::endl;
-				std::cout<<" --- End of data --- "<<std::endl;
-
+				data = source.substr(dataStart, dataEnd-dataStart);
 				std::string::size_type keyPos = 0;
 				std::string key = keywordBegin+keywordSeparator+keywordKey+keywordSeparator;
 				keyPos = data.find(key, keyPos);
@@ -249,8 +250,8 @@ namespace lre {
 					}
 					std::string::size_type keyPosEnd = keyPos2+keywordEndTag.size();
 					std::string keyName = data.substr(keyPos+key.size(), keyPos2-keyPos-key.size());
-					std::cout<<"Key: '"<<keyName<<"' "; std::cout.flush();
-					std::cout<<"Compl. entry: '"<<data.substr(keyPos, keyPosEnd-keyPos)<<"' "; std::cout.flush();
+					//std::cout<<"Key: '"<<keyName<<"' "; std::cout.flush();
+					//std::cout<<"Compl. entry: '"<<data.substr(keyPos, keyPosEnd-keyPos)<<"' "; std::cout.flush();
 					StringStringMap::const_iterator valueItr = dataSet->getMap().find(keyName);
 					if (valueItr == dataSet->getMap().end()) {
 						std::cout<<"Key not found. ";
@@ -258,23 +259,34 @@ namespace lre {
 						continue;
 					}
 					data.replace(keyPos, keyPosEnd-keyPos, valueItr->second);
-					std::cout<<"newData:"<<data;
+					//std::cout<<"newData:"<<data;
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
 				resultData += data;
+				std::cout<<data<<std::flush;
 				if (settings().getAddAppendixAfterLastSet() || (!settings().getAddAppendixAfterLastSet() && setNumber != compData->getNumSets()-1)) {
 					resultData += settings().getAppendixString();
+					std::cout<<settings().getAppendixString();
 				}
+
+				std::cout<<std::endl<<" --- End of Set #"<<setNumber+1<<" --- "<<std::endl;
 			}
 
-			std::cout<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; std::cout.flush();
+			//std::cout<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; std::cout.flush();
 			source.replace(compStartIndex, compEndIndex-compStartIndex, resultData);
 
 			comp = compStart;
 			f = source.find(comp/*, pos*/);
 		}
 
-		return FileUtils::putFile(target_filename, source);
+		bool success = FileUtils::putFile(target_filename, source);
+		if (success) {
+			std::cout<<"File completed successfully."<<std::endl;
+		} else {
+			std::cout<<"Write file failed."<<std::endl;
+		}
+		std::cout<<std::endl;
+		return true;
 	}
 
 	//=======================================================================================
