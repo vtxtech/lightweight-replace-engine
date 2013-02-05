@@ -1,0 +1,9 @@
+SET(DATA_SUB_FILES
+	${DATA_PATH}/sub/docA.csv.in
+	${DATA_PATH}/sub/docB.csv.in
+)
+
+INSTALL(
+	FILES        ${DATA_SUB_FILES}
+	DESTINATION  ${DATA_INSTALLDIR}/sub
+)
