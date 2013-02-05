@@ -157,7 +157,7 @@ namespace lre {
 					descr = descr.substr(p, descr.size() - p);
 				}
 				// ok, finally print out the last line
-				int lastLineSize = leftColumnWidth+descr.size();
+				std::string::size_type lastLineSize = leftColumnWidth+descr.size();
 				std::cout<<fill(descr.substr(0, rightColumnWidth), lastLineSize, Left);
 				if (lastLineSize != terminalWidth) { std::cout<<std::endl<<std::endl; }
 			} else {

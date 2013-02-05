@@ -62,8 +62,8 @@ namespace lre {
 		std::string setTagBegin = "<LRE:SET>";
 		std::string setTagEnd = "</LRE:SET>";
 
-		unsigned int f = 0; // the current string position
-		unsigned int e = 0; // position of the end of the component
+		std::string::size_type f = 0; // the current string position
+		std::string::size_type e = 0; // position of the end of the component
 		unsigned int i = 0; // number of sets found inside the component
 
 		f = str.find(compTagBegin1, f);
@@ -71,7 +71,7 @@ namespace lre {
 		if (f == std::string::npos) { return false; }
 		f += compTagBegin1.size();
 
-		unsigned int namePos = str.find(compTagBegin2, f);
+		std::string::size_type namePos = str.find(compTagBegin2, f);
 		// Component ">" missing
 		if (namePos == std::string::npos) { return false; }
 
@@ -96,7 +96,7 @@ namespace lre {
 					return true;
 				}
 			}
-			unsigned int f2 = str.find(setTagEnd, f+setTagBegin.size());
+			std::string::size_type f2 = str.find(setTagEnd, f+setTagBegin.size());
 			// Missing end tag "</LRE:SET>"
 			if (f2 == std::string::npos || f2 >= e) { return false; }
 			f2 += setTagEnd.size();
