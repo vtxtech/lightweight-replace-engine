@@ -15,12 +15,7 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
-# ToDo list for upcoming releases
-# --------------------------------------------------------
-# * (1.0.0) Remove any warnings (compiling with default compiler flags)
-#
-# -----------------------------------------------------------------------------
-# Change Notes LRE v.1.0.0 (upcoming release)
+# Change Notes LRE v.1.0.0 (2013-02-06), Stable Release
 # --------------------------------------------------------
 #
 # * Introduced lre::Notify
