@@ -192,16 +192,14 @@ namespace lre {
 		std::string::size_type f = source.find(comp, pos);
 		if (f == std::string::npos) {
 			lre::notify(lre::DEBUG)<<"Nothing to be done."<<std::endl<<std::endl;
-			return true;
+			return FileUtils::putFile(target_filename, source);
 		}
 		// Process 'COMPONENT's
 		while (f != std::string::npos) {
 			std::string::size_type compStartIndex = f;
 			std::string::size_type f2 = source.find(keywordEndTag, f);
 			if (f2 == std::string::npos) {
-				lre::notify(lre::ERROR)<<red<<"Unclosed "<<comp<<"-tag after position "<<f<<white;
-				lre::notify(lre::DEBUG)<<red<<" in "<<source_filename<<" "<<white;
-				lre::notify(lre::ALWAYS).flush();
+				lre::notify(lre::ERROR)<<red<<"Unclosed '"<<comp<<"'-tag after position in "<<source_filename<<" "<<white<<std::endl;
 				return false;
 			}
 			std::string componentName = source.substr(f+comp.size(), f2-f-comp.size());
@@ -211,9 +209,7 @@ namespace lre {
 			comp = keywordEnd+keywordSeparator+keywordComponent+keywordSeparator+componentName+keywordEndTag;
 			f = source.find(comp, pos);
 			if (f == std::string::npos) {
-				lre::notify(lre::ERROR)<<red<<"Missing "<<comp<<" "<<white;
-				lre::notify(lre::DEBUG)<<red<<" for "<<componentName<<" at position "<<pos<<white;
-				lre::notify(lre::ALWAYS).flush();
+				lre::notify(lre::ERROR)<<red<<"Missing '"<<comp<<"' for '"<<componentName<<"' at position "<<pos<<white<<std::endl;
 				return false;
 			}
 			pos = f+comp.size();
@@ -222,11 +218,10 @@ namespace lre {
 			std::string::size_type compEndIndex = dataEnd+comp.size();
 			Component* compData = getComponent(componentName);
 			if (compData == NULL) {
-				lre::notify(lre::DEBUG)<<red<<"Component '"<<componentName<<"' is "<<white;
-				lre::notify(lre::ERROR)<<red<<"undefined! "<<white<<std::endl;
+				lre::notify(lre::ERROR)<<red<<"Component '"<<componentName<<"' is undefined! "<<white<<std::endl;
 				comp = compStart;
 				f = source.find(comp, compEndIndex);
-				continue;
+				return false;
 			}
 
 			std::string data = source.substr(dataStart, dataEnd-dataStart);
@@ -242,7 +237,7 @@ namespace lre {
 			for (unsigned int setNumber = 0; setNumber < compData->getNumSets(); ++setNumber) {
 				Set* dataSet = compData->getSet(setNumber);
 				if (dataSet == NULL) {
-					lre::notify(lre::ERROR)<<red<<" --- Failed to get Set no. "<<setNumber<<" for Component '"+componentName+"'--- "<<white<<std::endl;
+					lre::notify(lre::ERROR)<<yellow<<" --- Failed to get Set no. "<<setNumber<<" for Component '"+componentName+"'--- "<<white<<std::endl;
 					continue;
 				}
 				lre::notify(lre::DEBUG)<<" --- Set #"<<setNumber<<" --- "<<std::endl;

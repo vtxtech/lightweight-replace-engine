@@ -21,8 +21,7 @@ class RunTest : public ::testing::Test {
 
     virtual void SetUp()
 	{
-		filename_ = "./generated-by-runtest/output.lre";
-		directory_ = lre::FileUtils::extractDirectory(filename_);
+		directory_ = "./generated-by-runtest";
 		lre::FileUtils::makeDirectory(directory_);
     }
     
@@ -31,18 +30,17 @@ class RunTest : public ::testing::Test {
 
 	}
 
-	std::string filename_;
 	std::string directory_;
 
 };
 
-TEST_F(RunTest, InvalidData)
+TEST_F(RunTest, MissingKeysInSet)
 {
 	// Create a ReplaceEngine to do the job
 	lre::ReplaceEngine re;
 
-	re.settings().setVerbose(true);
-	
+	re.settings().setSilent(true);
+
 	// Ignore any command line arguments
 	// we setup everything manually here.
 	re.settings().setInput("../data");
@@ -75,9 +73,127 @@ TEST_F(RunTest, InvalidData)
 	set12->addPair("name", "mw");
 	set12->addPair("password", "dummy");
 
+	lre::notify(lre::ALWAYS)<<"Note that the following error is expected:"<<std::endl;
 	// Finally to the work
 	EXPECT_EQ(3, re.run());
+
+	// Check that the failed file WAS NOT created
+	EXPECT_FALSE(lre::FileUtils::fileExists(lre::FileUtils::includeTrailingSeparator(directory_)+"doc1.csv"));
 }
 
+TEST_F(RunTest, MissingComponent)
+{
+	// Create a ReplaceEngine to do the job
+	lre::ReplaceEngine re;
 
+	re.settings().setSilent(true);
+	
+	// Ignore any command line arguments
+	// we setup everything manually here.
+	re.settings().setInput("../data/doc_with_errors1.csv.in2");
+	re.settings().setOutputDirectory(directory_);
+	re.settings().setRecursive(false);
+	re.settings().setRemoveExtension(true);
+	re.settings().setFilePattern("*.in2");
+	re.settings().setAppendixString("\n");
+	re.settings().setAddAppendixAfterLastSet(false);
+	
+	 // not required because the data used for replacing is following below
+	re.settings().setDataDirectory("");
 
+	// Add the data for file generation here
+	lre::Component* cmd = re.addComponent("Command");
+	lre::Set* set1 = cmd->addSet();
+	set1->addPair("name", "import");
+	set1->addPair("description_en", "Imports a geometry file");
+	set1->addPair("description_de", "Importiert eine Geometriedatei");
+	lre::Set* set2 = cmd->addSet();
+	set2->addPair("name", "exit");
+	set2->addPair("description_en", "Exits application");
+	set2->addPair("description_de", "Beendet die Anwendung");
+
+	lre::notify(lre::ALWAYS)<<"Note that the following error is expected:"<<std::endl;
+	// Finally to the work
+	EXPECT_EQ(3, re.run());
+
+	// Check that the failed file WAS NOT created
+	EXPECT_FALSE(lre::FileUtils::fileExists(lre::FileUtils::includeTrailingSeparator(directory_)+"doc_with_errors1.csv.in2"));
+}
+
+TEST_F(RunTest, ComponentUnclosed)
+{
+	// Create a ReplaceEngine to do the job
+	lre::ReplaceEngine re;
+
+	//re.settings().setSilent(true);
+	
+	// Ignore any command line arguments
+	// we setup everything manually here.
+	re.settings().setInput("../data/doc_with_errors2.csv.in2");
+	re.settings().setOutputDirectory(directory_);
+	re.settings().setRecursive(false);
+	re.settings().setRemoveExtension(true);
+	re.settings().setFilePattern("*.in2");
+	re.settings().setAppendixString("\n");
+	re.settings().setAddAppendixAfterLastSet(false);
+	
+	 // not required because the data used for replacing is following below
+	re.settings().setDataDirectory("");
+
+	// Add the data for file generation here
+	lre::Component* cmd = re.addComponent("Command");
+	lre::Set* set1 = cmd->addSet();
+	set1->addPair("name", "import");
+	set1->addPair("description_en", "Imports a geometry file");
+	set1->addPair("description_de", "Importiert eine Geometriedatei");
+	lre::Set* set2 = cmd->addSet();
+	set2->addPair("name", "exit");
+	set2->addPair("description_en", "Exits application");
+	set2->addPair("description_de", "Beendet die Anwendung");
+
+	lre::notify(lre::ALWAYS)<<"Note that the following error is expected:"<<std::endl;
+	// Finally to the work
+	EXPECT_EQ(3, re.run());
+
+	// Check that the failed file WAS NOT created
+	EXPECT_FALSE(lre::FileUtils::fileExists(lre::FileUtils::includeTrailingSeparator(directory_)+"doc_with_errors2.csv.in2"));
+}
+
+TEST_F(RunTest, KeyUnclosed)
+{
+	// Create a ReplaceEngine to do the job
+	lre::ReplaceEngine re;
+
+	//re.settings().setSilent(true);
+	
+	// Ignore any command line arguments
+	// we setup everything manually here.
+	re.settings().setInput("../data/doc_with_errors3.csv.in2");
+	re.settings().setOutputDirectory(directory_);
+	re.settings().setRecursive(false);
+	re.settings().setRemoveExtension(true);
+	re.settings().setFilePattern("*.in2");
+	re.settings().setAppendixString("\n");
+	re.settings().setAddAppendixAfterLastSet(false);
+	
+	 // not required because the data used for replacing is following below
+	re.settings().setDataDirectory("");
+
+	// Add the data for file generation here
+	lre::Component* cmd = re.addComponent("Command");
+	lre::Set* set1 = cmd->addSet();
+	set1->addPair("name", "import");
+	set1->addPair("description_en", "Imports a geometry file");
+	set1->addPair("description_de", "Importiert eine Geometriedatei");
+	lre::Set* set2 = cmd->addSet();
+	set2->addPair("name", "exit");
+	set2->addPair("description_en", "Exits application");
+	set2->addPair("description_de", "Beendet die Anwendung");
+
+	lre::notify(lre::ALWAYS)<<"Note that the following error is expected:"<<std::endl;
+	// Finally to the work
+	EXPECT_EQ(3, re.run());
+
+	// Check that the failed file WAS NOT created
+	EXPECT_FALSE(lre::FileUtils::fileExists(lre::FileUtils::includeTrailingSeparator(directory_)+"doc_with_errors3.csv.in2"));
+}

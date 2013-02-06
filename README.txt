@@ -18,8 +18,6 @@
 # ToDo list for upcoming releases
 # --------------------------------------------------------
 # * (1.0.0) Remove any warnings (compiling with default compiler flags)
-# * (1.0.0) Stability tests
-# * (1.0.0) Write some tests for invalid input data
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.1.0.0 (upcoming release)
@@ -29,6 +27,8 @@
 # * Introduced verbose and silent output modes
 # * Tidied up output of lre::ReplaceEngine::run()
 # * Added colored console output (Windows only)
+# * Added tests for checking handling of invalid input data
+# * Fixed a bug where files were not saved if they had not to be processed
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.9.0 (2013-02-04), Developer Release

@@ -1,3 +1,0 @@
-C:\dev\dac\src\DAC3\branches\jos\libs\build\intern\LRE\trunk\examples\example_lre\Debug\example_lre.exe --input C:\dev\dac\src\DAC3\branches\jos\libs\intern\LRE\trunk\data --output C:\dev\dac\src\DAC3\branches\jos\libs\intern\LRE\trunk\data/generated-keep -R -K
-C:\dev\dac\src\DAC3\branches\jos\libs\build\intern\LRE\trunk\examples\example_lre\Debug\example_lre.exe --input C:\dev\dac\src\DAC3\branches\jos\libs\intern\LRE\trunk\data --output C:\dev\dac\src\DAC3\branches\jos\libs\intern\LRE\trunk\data/generated-remove -R
-C:\dev\dac\src\DAC3\branches\jos\libs\build\intern\LRE\trunk\examples\example_lre\Debug\example_lre.exe --input C:\dev\dac\src\DAC3\branches\jos\libs\intern\LRE\trunk\data --output C:\dev\dac\src\DAC3\branches\jos\libs\intern\LRE\trunk\data/generated-remove

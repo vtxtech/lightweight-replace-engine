@@ -2,6 +2,9 @@ SET(DATA_PATH ${CMAKE_SOURCE_DIR}/data)
 
 SET(DATA_FILES
 	${DATA_PATH}/doc1.csv.in
+	${DATA_PATH}/doc_with_errors1.csv.in2
+	${DATA_PATH}/doc_with_errors2.csv.in2
+	${DATA_PATH}/doc_with_errors3.csv.in2
 	${DATA_PATH}/test.csv
 )
 
