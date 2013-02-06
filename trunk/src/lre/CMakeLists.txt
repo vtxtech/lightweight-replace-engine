@@ -23,6 +23,7 @@ SET(TARGET_SRC
 	ArgumentParser.cpp
 	Component.cpp
 	FileUtils.cpp
+	Notify.cpp
 	ReplaceEngine.cpp
 	Set.cpp
 	Settings.cpp
@@ -32,6 +33,7 @@ SET(TARGET_H
 	Component.h
 	Export.h
 	FileUtils.h
+	Notify.h
 	ReplaceEngine.h
 	Set.h
 	Settings.h

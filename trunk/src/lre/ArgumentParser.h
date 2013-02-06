@@ -91,7 +91,7 @@ namespace lre {
 			int reportUnusedArguments();
 
 			// Report the command line options added using addCommandLineOption
-			// on the command line (std::cout)
+			// on the command line (lre::notify())
 			// Use this for displaying command line help, e.g. --help or -?
 			void reportOptions();
 

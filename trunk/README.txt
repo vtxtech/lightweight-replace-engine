@@ -19,12 +19,15 @@
 # --------------------------------------------------------
 # * (1.0.0) Remove any warnings (compiling with default compiler flags)
 # * (1.0.0) Stability tests
+# * (1.0.0) Write some tests for invalid input data
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.1.0.0 (upcoming release)
 # --------------------------------------------------------
 #
-# * None, yet.
+# * Introduced lre::Notify
+# * Introduced verbose and silent output modes
+# * Tidied up output of lre::ReplaceEngine::run()
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.9.0 (2013-02-04), Developer Release

@@ -61,17 +61,17 @@ namespace lre {
 	int ReplaceEngine::run()
 	{
 		// Check input data roughly
-		if (settings().getInput() == "") { std::cout<<"FATAL: Input path is undefined"<<std::endl; return 1; }
-		if (settings().getOutputDirectory() == "") { std::cout<<"FATAL: Output path is undefined"<<std::endl; return 1; }
-		if (settings().getRemoveExtension() && settings().getFilePattern() == "") { std::cout<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return 1; }
-		if (settings().getInput() == settings().getOutputDirectory() && !settings().getRemoveExtension()) { std::cout<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return 1; }
-		if (componentList_.size() == 0 && settings().getDataDirectory() == "") { std::cout<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return 1; }
+		if (settings().getInput() == "") { lre::notify(lre::ERROR)<<"FATAL: Input path is undefined"<<std::endl; return 1; }
+		if (settings().getOutputDirectory() == "") { lre::notify(lre::ERROR)<<"FATAL: Output path is undefined"<<std::endl; return 1; }
+		if (settings().getRemoveExtension() && settings().getFilePattern() == "") { lre::notify(lre::ERROR)<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return 1; }
+		if (settings().getInput() == settings().getOutputDirectory() && !settings().getRemoveExtension()) { lre::notify(lre::ERROR)<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return 1; }
+		if (componentList_.size() == 0 && settings().getDataDirectory() == "") { lre::notify(lre::ERROR)<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return 1; }
 
 		settings().setOutputDirectory(FileUtils::excludeTrailingSeparator(settings().getOutputDirectory()));
 		settings().setInput(FileUtils::excludeTrailingSeparator(settings().getInput()));
 		settings().setDataDirectory(FileUtils::excludeTrailingSeparator(settings().getDataDirectory()));
 
-		// Report input data to std::cout
+		// Report input data to lre::notify()
 		settings().reportSetup();
 
 		// Backup current lre::Component data which is restored at the end of run()
@@ -82,49 +82,51 @@ namespace lre {
 			std::vector<std::string> dataFiles;
 			dataFiles.clear();
 
-			//std::cout<<"Data file lookup..."<<std::endl;
+			lre::notify(lre::DEBUG)<<"Data file lookup..."<<std::endl;
 			dataFiles = FileUtils::findFiles(settings().getDataDirectory(), settings().getDataPattern(), false);
 
-			std::cout<<"--- Data files matching pattern ---"<<std::endl;
+			lre::notify(lre::NOTICE)<<"--- Data files matching pattern ---"<<std::endl;
 			for (unsigned int i = 0; i < dataFiles.size(); ++i) {
-				std::cout<<"FILE("<<i<<"): "<<dataFiles.at(i)<<"... "<<std::flush;
+				lre::notify(lre::NOTICE)<<"FILE("<<i<<"): "<<dataFiles.at(i)<<"... "<<std::flush;
 				if (loadData(dataFiles.at(i))) {
-					std::cout<<"Success."<<std::endl;
+					lre::notify(lre::NOTICE)<<"Success."<<std::endl;
 				} else {
-					std::cout<<"Failed."<<std::endl;
+					lre::notify(lre::ERROR)<<"Failed."<<std::endl;
+					return 2;
 				}
 			}
-			std::cout<<std::endl;
+			lre::notify(lre::NOTICE)<<std::endl;
 		}
 
-		// Report data to std::cout
+		// Report data to lre::notify()
 		reportData();
 
 		// This is the list of files to be processed
 		std::vector<std::string> files;
 		files.clear();
 
-		//std::cout<<"Source file lookup..."<<std::endl;
+		lre::notify(lre::DEBUG)<<"Source file lookup..."<<std::endl;
 		files = FileUtils::findFiles(settings().getInput(), settings().getFilePattern(), settings().getRecursive());
 
-#ifdef _DEBUG
-		std::cout<<std::endl;
-#endif
-		std::cout<<"--- Source files matching pattern ---"<<std::endl;
+		lre::notify(lre::DEBUG)<<std::endl;
+		lre::notify(lre::DEBUG)<<"--- Processing files matching pattern ---"<<std::endl;
 		for (unsigned int i = 0; i < files.size(); ++i) {
-			processFile(files.at(i), makeTargetFilename(files.at(i)));
+			std::string targetFile = makeTargetFilename(files.at(i));
+			if (!processFile(files.at(i), targetFile)) {
+				lre::notify(lre::ERROR)<<"Failed processing '"<<files.at(i)<<"' to '"<<targetFile<<"'. Aborting."<<std::endl;
+			}
 		}
 
 		// Restore componentList_ from backup before file loading
 		componentList_ = tempCompList;
 
+		lre::notify(lre::NOTICE)<<"Finished successfully."<<std::endl;
 		return 0;
 	}
 
 	//=======================================================================================
 	std::string ReplaceEngine::makeTargetFilename(const std::string& source_filename) const
 	{
-		//std::cout<<"target file..."<<std::endl;
 		std::string result = source_filename;
 		// Settings for consideration
 		// * bool settings().getRemoveExtension();
@@ -139,9 +141,9 @@ namespace lre {
 		if (osgDB::fileType(outputPath) == osgDB::REGULAR_FILE) {
 			outputPath = FileUtils::extractDirectory(outputPath);
 		}
-		//std::cout<<"outputPath="<<outputPath<<std::endl;
-		//std::cout<<"inputPath="<<inputPath<<std::endl;
-		//std::cout<<"source_filename="<<source_filename<<std::endl;
+		lre::notify(lre::DEBUG)<<"outputPath="<<outputPath<<std::endl;
+		lre::notify(lre::DEBUG)<<"inputPath="<<inputPath<<std::endl;
+		lre::notify(lre::DEBUG)<<"source_filename="<<source_filename<<std::endl;
 		if (!settings().getKeepSubFolders()) {
 			// Output straight into the target folder
 			result = outputPath + FileUtils::separator() + FileUtils::extractFilename(result);
@@ -165,9 +167,9 @@ namespace lre {
 	//=======================================================================================
 	bool ReplaceEngine::processFile(const std::string& source_filename, const std::string& target_filename)
 	{
-		//std::cout<<"Processing..."<<std::endl;
-		std::cout<<"In: "<<source_filename<<std::endl;
-		std::cout<<"Out: "<<target_filename<<std::endl;
+		lre::notify(lre::DEBUG)<<"Processing..."<<std::endl;
+		lre::notify(lre::DEBUG)<<"In: "<<source_filename<<std::endl;
+		lre::notify(lre::DEBUG)<<"Out: "<<target_filename<<std::endl;
 		// Make a directory for the file, if it does not exist. makeDirectory
 		// returns true if successfully created or already existing.
 		if (!FileUtils::makeDirectory(FileUtils::extractDirectory(target_filename))) {
@@ -188,7 +190,7 @@ namespace lre {
 		std::string comp = compStart;
 		std::string::size_type f = source.find(comp, pos);
 		if (f == std::string::npos) {
-			std::cout<<"Nothing to be done."<<std::endl<<std::endl;
+			lre::notify(lre::DEBUG)<<"Nothing to be done."<<std::endl<<std::endl;
 			return true;
 		}
 		// Process 'COMPONENT's
@@ -196,45 +198,52 @@ namespace lre {
 			std::string::size_type compStartIndex = f;
 			std::string::size_type f2 = source.find(keywordEndTag, f);
 			if (f2 == std::string::npos) {
-				std::cout<<"Unclosed "<<comp<<"-tag. "; std::cout.flush();
+				lre::notify(lre::ERROR)<<"Unclosed "<<comp<<"-tag after position "<<f;
+				lre::notify(lre::DEBUG)<<" in "<<source_filename<<" ";
+				lre::notify(lre::ALWAYS).flush();
 				return false;
 			}
 			std::string componentName = source.substr(f+comp.size(), f2-f-comp.size());
 			pos = f2 + keywordEndTag.size();
 			std::string::size_type dataStart = pos;
-			std::cout<<"Component: \""<<componentName<<"\""<<std::flush;
+			lre::notify(lre::DEBUG)<<"Component: \""<<componentName<<"\""<<std::flush;
 			comp = keywordEnd+keywordSeparator+keywordComponent+keywordSeparator+componentName+keywordEndTag;
 			f = source.find(comp, pos);
 			if (f == std::string::npos) {
-				std::cout<<"Missing "<<comp<<" "; std::cout.flush();
+				lre::notify(lre::ERROR)<<"Missing "<<comp<<" ";
+				lre::notify(lre::DEBUG)<<" for "<<componentName<<" at position "<<pos;
+				lre::notify(lre::ALWAYS).flush();
 				return false;
 			}
 			pos = f+comp.size();
 			std::string::size_type dataEnd = f;
-			std::cout<<" from "<<dataStart<<" to "<<dataEnd<<std::endl;
+			lre::notify(lre::DEBUG)<<" from "<<dataStart<<" to "<<dataEnd<<std::endl;
 			std::string::size_type compEndIndex = dataEnd+comp.size();
 			Component* compData = getComponent(componentName);
 			if (compData == NULL) {
-				std::cout<<"undefined! "<<std::endl;
+				lre::notify(lre::DEBUG)<<"Component '"<<componentName<<"' is ";
+				lre::notify(lre::ERROR)<<"undefined! "<<std::endl;
 				comp = compStart;
 				f = source.find(comp, compEndIndex);
 				continue;
 			}
 
 			std::string data = source.substr(dataStart, dataEnd-dataStart);
-			std::cout<<" --- Data --- "<<std::endl;
-			std::cout<<"\""<<data<<"\""<<std::endl;
-			std::cout<<" --- End of data --- "<<std::endl;
+			lre::notify(lre::DEBUG)<<" --- Data --- "<<std::endl;
+			lre::notify(lre::DEBUG)<<"\""<<data<<"\""<<std::endl;
+			lre::notify(lre::DEBUG)<<" --- End of data --- "<<std::endl;
 
 			std::string resultData = "";
 
 			for (unsigned int setNumber = 0; setNumber < compData->getNumSets(); ++setNumber) {
+				lre::notify(lre::DEBUG)<<"Processing "<<compData->getNumSets()<<" sets "<<std::endl;
+
 				Set* dataSet = compData->getSet(setNumber);
 				if (dataSet == NULL) {
-					std::cout<<" --- Failed to get Set no. "<<setNumber<<" --- "<<std::endl;
+					lre::notify(lre::ERROR)<<" --- Failed to get Set no. "<<setNumber<<" for Component '"+componentName+"'--- "<<std::endl;
 					continue;
 				}
-				std::cout<<" --- Set #"<<setNumber+1<<" --- "<<std::endl;
+				lre::notify(lre::DEBUG)<<" --- Set #"<<setNumber+1<<" --- "<<std::endl;
 
 				data = source.substr(dataStart, dataEnd-dataStart);
 				std::string::size_type keyPos = 0;
@@ -245,34 +254,33 @@ namespace lre {
 				while (keyPos != std::string::npos) {
 					std::string::size_type keyPos2 = data.find(keywordEndTag, keyPos);
 					if (keyPos2 == std::string::npos) {
-						std::cout<<"Unclosed "<<key<<"-tag. "; std::cout.flush();
+						lre::notify(lre::ERROR)<<"Unclosed "<<key<<"-tag after position "<<keyPos; lre::notify(lre::ALWAYS).flush();
 						return false;
 					}
 					std::string::size_type keyPosEnd = keyPos2+keywordEndTag.size();
 					std::string keyName = data.substr(keyPos+key.size(), keyPos2-keyPos-key.size());
-					//std::cout<<"Key: '"<<keyName<<"' "; std::cout.flush();
-					//std::cout<<"Compl. entry: '"<<data.substr(keyPos, keyPosEnd-keyPos)<<"' "; std::cout.flush();
+
 					StringStringMap::const_iterator valueItr = dataSet->getMap().find(keyName);
 					if (valueItr == dataSet->getMap().end()) {
-						std::cout<<"Key not found. ";
+						lre::notify(lre::ERROR)<<"Key not found. ";
 						keyPos = data.find(key, keyPos2+keywordEndTag.size());
 						continue;
 					}
 					data.replace(keyPos, keyPosEnd-keyPos, valueItr->second);
-					//std::cout<<"newData:"<<data;
+					//lre::notify(lre::ALWAYS)<<"newData:"<<data;
 					keyPos = data.find(key/*, keyPos2+keywordEndTag.size()*/);
 				}
 				resultData += data;
-				std::cout<<data<<std::flush;
+				lre::notify(lre::DEBUG)<<data<<std::flush;
 				if (settings().getAddAppendixAfterLastSet() || (!settings().getAddAppendixAfterLastSet() && setNumber != compData->getNumSets()-1)) {
 					resultData += settings().getAppendixString();
-					std::cout<<settings().getAppendixString();
+					lre::notify(lre::DEBUG)<<settings().getAppendixString();
 				}
 
-				std::cout<<std::endl<<" --- End of Set #"<<setNumber+1<<" --- "<<std::endl;
+				lre::notify(lre::DEBUG)<<std::endl<<" --- End of Set #"<<setNumber+1<<" --- "<<std::endl;
 			}
 
-			//std::cout<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; std::cout.flush();
+			//lre::notify(lre::ALWAYS)<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; lre::notify().flush();
 			source.replace(compStartIndex, compEndIndex-compStartIndex, resultData);
 
 			comp = compStart;
@@ -281,11 +289,12 @@ namespace lre {
 
 		bool success = FileUtils::putFile(target_filename, source);
 		if (success) {
-			std::cout<<"File completed successfully."<<std::endl;
+			lre::notify(lre::DEBUG)<<"File completed successfully."<<std::endl;
 		} else {
-			std::cout<<"Write file failed."<<std::endl;
+			lre::notify(lre::DEBUG)<<"Write file failed."<<std::endl;
 		}
-		std::cout<<std::endl;
+		lre::notify(lre::DEBUG)<<std::endl;
+
 		return true;
 	}
 
@@ -360,12 +369,12 @@ namespace lre {
 	//=======================================================================================
 	void ReplaceEngine::reportData()
 	{
-		std::cout<<"--- Lightweight Replace Engine: Data ---"<<std::endl;
-		std::cout<<"No. of Components: "<<componentList_.size()<<std::endl;
+		lre::notify(lre::NOTICE)<<"--- Lightweight Replace Engine: Data ---"<<std::endl;
+		lre::notify(lre::NOTICE)<<"No. of Components: "<<componentList_.size()<<std::endl;
 		for (ComponentList::const_iterator itr = componentList_.begin(); itr != componentList_.end(); ++itr) {
-			std::cout<<"Component: "<<itr->getName()<<std::endl;
+			lre::notify(lre::NOTICE)<<"Component: "<<itr->getName()<<std::endl;
 		}
-		std::cout<<std::endl;
+		lre::notify(lre::NOTICE)<<std::endl;
 	}
 
 } // namespace lre
