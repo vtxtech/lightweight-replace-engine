@@ -22,6 +22,7 @@ ENDIF(LRE_BUILD_SHARED_LIBS)
 SET(TARGET_SRC
 	ArgumentParser.cpp
 	Component.cpp
+	ConsoleColor.cpp
 	FileUtils.cpp
 	Notify.cpp
 	ReplaceEngine.cpp
@@ -31,6 +32,7 @@ SET(TARGET_SRC
 SET(TARGET_H
 	ArgumentParser.h
 	Component.h
+	ConsoleColor.h
 	Export.h
 	FileUtils.h
 	Notify.h

@@ -61,11 +61,11 @@ namespace lre {
 	int ReplaceEngine::run()
 	{
 		// Check input data roughly
-		if (settings().getInput() == "") { lre::notify(lre::ERROR)<<"FATAL: Input path is undefined"<<std::endl; return 1; }
-		if (settings().getOutputDirectory() == "") { lre::notify(lre::ERROR)<<"FATAL: Output path is undefined"<<std::endl; return 1; }
-		if (settings().getRemoveExtension() && settings().getFilePattern() == "") { lre::notify(lre::ERROR)<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return 1; }
-		if (settings().getInput() == settings().getOutputDirectory() && !settings().getRemoveExtension()) { lre::notify(lre::ERROR)<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return 1; }
-		if (componentList_.size() == 0 && settings().getDataDirectory() == "") { lre::notify(lre::ERROR)<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return 1; }
+		if (settings().getInput() == "") { lre::notify(lre::ERROR)<<"FATAL: Input path is undefined"<<std::endl; return INVALID_SETTINGS; }
+		if (settings().getOutputDirectory() == "") { lre::notify(lre::ERROR)<<"FATAL: Output path is undefined"<<std::endl; return INVALID_SETTINGS; }
+		if (settings().getRemoveExtension() && settings().getFilePattern() == "") { lre::notify(lre::ERROR)<<"FATAL: Cannot remove extension without extension defined."<<std::endl; return INVALID_SETTINGS; }
+		if (settings().getInput() == settings().getOutputDirectory() && !settings().getRemoveExtension()) { lre::notify(lre::ERROR)<<"FATAL: Input path and output path must not be equal if extensions are kept."<<std::endl; return INVALID_SETTINGS; }
+		if (componentList_.size() == 0 && settings().getDataDirectory() == "") { lre::notify(lre::ERROR)<<"FATAL: No data defined. Please set either data path or add components in source."<<std::endl; return INVALID_SETTINGS; }
 
 		settings().setOutputDirectory(FileUtils::excludeTrailingSeparator(settings().getOutputDirectory()));
 		settings().setInput(FileUtils::excludeTrailingSeparator(settings().getInput()));
@@ -91,8 +91,8 @@ namespace lre {
 				if (loadData(dataFiles.at(i))) {
 					lre::notify(lre::NOTICE)<<"Success."<<std::endl;
 				} else {
-					lre::notify(lre::ERROR)<<"Failed."<<std::endl;
-					return 2;
+					lre::notify(lre::ERROR)<<red<<"Failed."<<white<<std::endl;
+					return FAILED_TO_LOAD_DATAFILE;
 				}
 			}
 			lre::notify(lre::NOTICE)<<std::endl;
@@ -113,15 +113,16 @@ namespace lre {
 		for (unsigned int i = 0; i < files.size(); ++i) {
 			std::string targetFile = makeTargetFilename(files.at(i));
 			if (!processFile(files.at(i), targetFile)) {
-				lre::notify(lre::ERROR)<<"Failed processing '"<<files.at(i)<<"' to '"<<targetFile<<"'. Aborting."<<std::endl;
+				lre::notify(lre::ERROR)<<red<<"Failed processing '"<<files.at(i)<<"' to '"<<targetFile<<"'."<<std::endl<<"Aborting."<<white<<std::endl;
+				return FAILED_TO_PROCESS_FILE;
 			}
 		}
 
 		// Restore componentList_ from backup before file loading
 		componentList_ = tempCompList;
 
-		lre::notify(lre::NOTICE)<<"Finished successfully."<<std::endl;
-		return 0;
+		lre::notify(lre::NOTICE)<<green<<"Finished successfully."<<white<<std::endl;
+		return FINISHED_SUCCESSFULLY;
 	}
 
 	//=======================================================================================
@@ -198,8 +199,8 @@ namespace lre {
 			std::string::size_type compStartIndex = f;
 			std::string::size_type f2 = source.find(keywordEndTag, f);
 			if (f2 == std::string::npos) {
-				lre::notify(lre::ERROR)<<"Unclosed "<<comp<<"-tag after position "<<f;
-				lre::notify(lre::DEBUG)<<" in "<<source_filename<<" ";
+				lre::notify(lre::ERROR)<<red<<"Unclosed "<<comp<<"-tag after position "<<f<<white;
+				lre::notify(lre::DEBUG)<<red<<" in "<<source_filename<<" "<<white;
 				lre::notify(lre::ALWAYS).flush();
 				return false;
 			}
@@ -210,8 +211,8 @@ namespace lre {
 			comp = keywordEnd+keywordSeparator+keywordComponent+keywordSeparator+componentName+keywordEndTag;
 			f = source.find(comp, pos);
 			if (f == std::string::npos) {
-				lre::notify(lre::ERROR)<<"Missing "<<comp<<" ";
-				lre::notify(lre::DEBUG)<<" for "<<componentName<<" at position "<<pos;
+				lre::notify(lre::ERROR)<<red<<"Missing "<<comp<<" "<<white;
+				lre::notify(lre::DEBUG)<<red<<" for "<<componentName<<" at position "<<pos<<white;
 				lre::notify(lre::ALWAYS).flush();
 				return false;
 			}
@@ -221,8 +222,8 @@ namespace lre {
 			std::string::size_type compEndIndex = dataEnd+comp.size();
 			Component* compData = getComponent(componentName);
 			if (compData == NULL) {
-				lre::notify(lre::DEBUG)<<"Component '"<<componentName<<"' is ";
-				lre::notify(lre::ERROR)<<"undefined! "<<std::endl;
+				lre::notify(lre::DEBUG)<<red<<"Component '"<<componentName<<"' is "<<white;
+				lre::notify(lre::ERROR)<<red<<"undefined! "<<white<<std::endl;
 				comp = compStart;
 				f = source.find(comp, compEndIndex);
 				continue;
@@ -235,15 +236,16 @@ namespace lre {
 
 			std::string resultData = "";
 
+			if (compData->getNumSets() > 0) {
+				lre::notify(lre::DEBUG)<<"Processing "<<compData->getNumSets()<<" sets (indexed from 0 to "<<compData->getNumSets()-1<<")"<<std::endl;
+			}
 			for (unsigned int setNumber = 0; setNumber < compData->getNumSets(); ++setNumber) {
-				lre::notify(lre::DEBUG)<<"Processing "<<compData->getNumSets()<<" sets "<<std::endl;
-
 				Set* dataSet = compData->getSet(setNumber);
 				if (dataSet == NULL) {
-					lre::notify(lre::ERROR)<<" --- Failed to get Set no. "<<setNumber<<" for Component '"+componentName+"'--- "<<std::endl;
+					lre::notify(lre::ERROR)<<red<<" --- Failed to get Set no. "<<setNumber<<" for Component '"+componentName+"'--- "<<white<<std::endl;
 					continue;
 				}
-				lre::notify(lre::DEBUG)<<" --- Set #"<<setNumber+1<<" --- "<<std::endl;
+				lre::notify(lre::DEBUG)<<" --- Set #"<<setNumber<<" --- "<<std::endl;
 
 				data = source.substr(dataStart, dataEnd-dataStart);
 				std::string::size_type keyPos = 0;
@@ -254,7 +256,7 @@ namespace lre {
 				while (keyPos != std::string::npos) {
 					std::string::size_type keyPos2 = data.find(keywordEndTag, keyPos);
 					if (keyPos2 == std::string::npos) {
-						lre::notify(lre::ERROR)<<"Unclosed "<<key<<"-tag after position "<<keyPos; lre::notify(lre::ALWAYS).flush();
+						lre::notify(lre::ERROR)<<red<<"Unclosed "<<key<<"-tag after position "<<keyPos<<white; lre::notify(lre::ALWAYS).flush();
 						return false;
 					}
 					std::string::size_type keyPosEnd = keyPos2+keywordEndTag.size();
@@ -262,9 +264,9 @@ namespace lre {
 
 					StringStringMap::const_iterator valueItr = dataSet->getMap().find(keyName);
 					if (valueItr == dataSet->getMap().end()) {
-						lre::notify(lre::ERROR)<<"Key not found. ";
+						lre::notify(lre::ERROR)<<red<<"Error: Key '"<<keyName<<"' for Set #"<<setNumber+1<<" of Component '"<<componentName<<"' not found."<<white<<std::endl;
 						keyPos = data.find(key, keyPos2+keywordEndTag.size());
-						continue;
+						return false;
 					}
 					data.replace(keyPos, keyPosEnd-keyPos, valueItr->second);
 					//lre::notify(lre::ALWAYS)<<"newData:"<<data;
@@ -277,7 +279,7 @@ namespace lre {
 					lre::notify(lre::DEBUG)<<settings().getAppendixString();
 				}
 
-				lre::notify(lre::DEBUG)<<std::endl<<" --- End of Set #"<<setNumber+1<<" --- "<<std::endl;
+				lre::notify(lre::DEBUG)<<std::endl<<" --- End of Set #"<<setNumber<<" --- "<<std::endl;
 			}
 
 			//lre::notify(lre::ALWAYS)<<"Compl. COMP: '"<<source.substr(compStartIndex, compEndIndex-compStartIndex)<<"' "; lre::notify().flush();

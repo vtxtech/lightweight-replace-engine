@@ -15,6 +15,10 @@
 
 #include "Export.h"
 
+// Convenience objs to set std::cout colors (currently WIN32 only)
+// use lre::notify()<<red<<"some text"<<white<<std::endl;
+#include "ConsoleColor.h"
+
 //-- STL --//
 #include <iostream>
 
