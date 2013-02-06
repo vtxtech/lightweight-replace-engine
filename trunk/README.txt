@@ -28,6 +28,7 @@
 # * Introduced lre::Notify
 # * Introduced verbose and silent output modes
 # * Tidied up output of lre::ReplaceEngine::run()
+# * Added colored console output (Windows only)
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.0.9.0 (2013-02-04), Developer Release

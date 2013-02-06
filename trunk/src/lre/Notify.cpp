@@ -73,8 +73,10 @@ namespace lre {
 
 	std::ostream& notify(const lre::NotifySeverity severity)
 	{
-		if (severity == lre::ERROR) { 
-			return std::cerr;
+		if (severity == lre::ERROR) {
+			// Maybe we would like to use std::cerr instead of std::cout,
+			// so we create a placeholder
+			return std::cout; // std::cerr;
 		} else {
 			if (severity < getNotifyLevel()) {
 				return getNotifySettings().noOutputStream_;

@@ -40,6 +40,13 @@ namespace lre {
 			// Initialize from const command line arguments (optionally). ReplaceEngine uses default settings if not called.
 			int init(int argc, const char** argv);
 
+			enum RunReturnCodes {
+				FINISHED_SUCCESSFULLY = 0,
+				INVALID_SETTINGS = 1,
+				FAILED_TO_LOAD_DATAFILE = 2,
+				FAILED_TO_PROCESS_FILE = 3
+			};
+
 			// Invoke a ReplaceEngine run
 			// @return 0 if succeeded. Error codes are >=1
 			int run();
