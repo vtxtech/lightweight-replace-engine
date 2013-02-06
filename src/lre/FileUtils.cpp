@@ -10,6 +10,8 @@
 
 #include "FileUtils.h"
 
+#include "Notify.h"
+
 //-- OSG --//
 #include "extern/FileUtils.h"
 
@@ -139,17 +141,13 @@ namespace lre {
 			if (fileExists(name)) {
 				if (osgDB::fileType(name) == osgDB::DIRECTORY) {
 					if (recursive) {
-#ifdef _DEBUG
-						std::cout<<"Recursing DIR: "<<name<<std::endl;
-#endif
+						lre::notify(lre::DEBUG)<<"Searching directory: "<<name<<std::endl;
 						std::vector<std::string> subfolderFiles = findFiles(name, extension, recursive);
 						for (unsigned int k = 0; k < subfolderFiles.size(); ++k) {
 							files.push_back(subfolderFiles.at(k));
 						}
 					} else {
-#ifdef _DEBUG
-						std::cout<<"Skipping DIR: "<<name<<std::endl;
-#endif
+						lre::notify(lre::DEBUG)<<"Skipping directory: "<<name<<std::endl;
 					}
 				} else {
 					files.push_back(name);

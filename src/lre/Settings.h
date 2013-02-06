@@ -13,6 +13,8 @@
 
 #include "Export.h"
 
+#include "Notify.h"
+
 //-- STL --//
 #include <string>
 
@@ -111,11 +113,25 @@ namespace lre {
 			// @return true, if appendix is added after each set. false, if appendix is skipped after last set.
 			bool getAddAppendixAfterLastSet() const { return appendixAfterLastSet_; }
 
-			// Print the settings to std::cout
+			// Enable verbose (debug) output mode
+			void setVerbose(bool state) { verbose_ = state; silent_ = false; lre::setNotifyLevel(lre::DEBUG); }
+
+			// Getter for verbose (debug) output mode
+			bool getVerbose() const { return verbose_; }
+
+			// Enable silent mode (no standard output, just errors)
+			void setSilent(bool state) { silent_ = state; verbose_ = false; lre::setNotifyLevel(lre::ALWAYS); }
+
+			// Getter for verbose (debug) output mode
+			bool getSilent() const { return silent_; }
+
+			// Print the settings to lre::notify
 			void reportSetup();
 	
 	private:
 
+			bool verbose_;
+			bool silent_;
 			bool recursive_;
 			bool keepStructure_;
 			bool removeExtension_;

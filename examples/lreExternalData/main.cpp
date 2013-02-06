@@ -17,7 +17,10 @@ int main(int argc, char** argv)
 {
 	// Create a ReplaceEngine to do the job
 	lre::ReplaceEngine re;
-	
+	// handle command line args because to allow the user to enable verbose mode
+	// using --verbose or -V
+	re.init(argc, argv);
+
 	// Ignore any command line arguments
 	// we setup everything manually here.
 	re.settings().setInput("../data");

@@ -11,6 +11,7 @@
 #include "ArgumentParser.h"
 
 #include "FileUtils.h"
+#include "Notify.h"
 
 //-- STL --//
 #include <iostream>
@@ -111,8 +112,8 @@ namespace lre {
 	//=======================================================================================
 	void ArgumentParser::reportOptions()
 	{
-		if (appName_ != "") { std::cout<<appName_<<std::endl; }
-		if (appUsage_ != "") { std::cout<<"Usage: "<<lre::FileUtils::extractFilename(arguments_.at(0).arg)<<" "<<appUsage_<<std::endl<<std::endl; }
+		if (appName_ != "") { lre::notify(lre::ALWAYS)<<appName_<<std::endl; }
+		if (appUsage_ != "") { lre::notify(lre::ALWAYS)<<"Usage: "<<lre::FileUtils::extractFilename(arguments_.at(0).arg)<<" "<<appUsage_<<std::endl<<std::endl; }
 
 		std::string::size_type terminalWidth = 80;
 		std::string::size_type leftColumnWidth = 5;
@@ -122,13 +123,13 @@ namespace lre {
 		for (StringStringMap::iterator itr = options_.begin(); itr != options_.end(); ++itr) {
 			// print option, e.g. --input <foo>
 			std::string param = fill(itr->first + ": ", leftColumnWidth, Right);
-			std::cout<<param;
+			lre::notify(lre::ALWAYS)<<param;
 			// fill the left column of the next line after the option
 			// with spaces, so the description does not have to take
 			// care of whether it's in the same line with the option
 			// or in the next line
 			if (param.size() > leftColumnWidth) {
-				std::cout<<std::endl<<std::endl<<fill("", leftColumnWidth, Left);
+				lre::notify(lre::ALWAYS)<<std::endl<<std::endl<<fill("", leftColumnWidth, Left);
 			}
 			// now print the description
 			std::string descr = itr->second;
@@ -137,7 +138,7 @@ namespace lre {
 				std::string out = descr.substr(0, rightColumnWidth);
 				// well, now find the last space so we do not break within a word
 				std::string::size_type p = out.find_last_of(" ");
-				std::cout<<fill(out.substr(0, p), terminalWidth-leftColumnWidth, Right);
+				lre::notify(lre::ALWAYS)<<fill(out.substr(0, p), terminalWidth-leftColumnWidth, Right);
 				// skip the space so we do not start our next line with it
 				p++;
 				// descr now holds only the rest of the text that isn't
@@ -151,17 +152,17 @@ namespace lre {
 					p = out.find_last_of(" ");
 					out = out.substr(0, p);
 					// ... and print it!
-					std::cout<<fill(fill(out, leftColumnWidth+out.size(), Left), terminalWidth, Right);
+					lre::notify(lre::ALWAYS)<<fill(fill(out, leftColumnWidth+out.size(), Left), terminalWidth, Right);
 					// skip the space
 					p++;
 					descr = descr.substr(p, descr.size() - p);
 				}
 				// ok, finally print out the last line
 				std::string::size_type lastLineSize = leftColumnWidth+descr.size();
-				std::cout<<fill(descr.substr(0, rightColumnWidth), lastLineSize, Left);
-				if (lastLineSize != terminalWidth) { std::cout<<std::endl<<std::endl; }
+				lre::notify(lre::ALWAYS)<<fill(descr.substr(0, rightColumnWidth), lastLineSize, Left);
+				if (lastLineSize != terminalWidth) { lre::notify(lre::ALWAYS)<<std::endl<<std::endl; }
 			} else {
-				std::cout<<descr<<std::endl<<std::endl;
+				lre::notify(lre::ALWAYS)<<descr<<std::endl<<std::endl;
 			}
 		}
 	}
@@ -172,11 +173,11 @@ namespace lre {
 		int failedCount = 0;
 		for (unsigned int i = 1; i < arguments_.size(); ++i) {
 			if (!arguments_.at(i).used) {
-				std::cout<<"Invalid option '"<<arguments_.at(i).arg<<"'."<<std::endl;
+				lre::notify(lre::ERROR)<<"Invalid option '"<<arguments_.at(i).arg<<"'."<<std::endl;
 				failedCount++;
 			}
 			if (arguments_.at(i).missingParameter) {
-				std::cout<<"Option '"<<arguments_.at(i).arg<<"' missing a parameter."<<std::endl;
+				lre::notify(lre::ERROR)<<"Option '"<<arguments_.at(i).arg<<"' missing a parameter."<<std::endl;
 				failedCount++;
 			}
 		}

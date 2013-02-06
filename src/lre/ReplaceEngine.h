@@ -14,6 +14,7 @@
 #include "Export.h"
 
 #include "Component.h"
+#include "Notify.h"
 #include "Settings.h"
 
 //-- STL --//

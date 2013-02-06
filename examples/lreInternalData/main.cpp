@@ -17,6 +17,9 @@ int main(int argc, char** argv)
 {
 	// Create a ReplaceEngine to do the job
 	lre::ReplaceEngine re;
+	// handle command line args because to allow the user to enable verbose mode
+	// using --verbose or -V
+	re.init(argc, argv);
 	
 	// Ignore any command line arguments
 	// we setup everything manually here.
@@ -28,8 +31,8 @@ int main(int argc, char** argv)
 	re.settings().setAppendixString("\n");
 	re.settings().setAddAppendixAfterLastSet(false);
 	
-	// *re.settings().setDataDirectory(...)* is not required because
-	// the data used for replacing is following now:
+	 // not required because the data used for replacing is following below
+	re.settings().setDataDirectory("");
 
 	// Add the data for file generation here
 	lre::Component* cmd = re.addComponent("Command");

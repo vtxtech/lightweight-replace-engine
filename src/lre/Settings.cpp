@@ -13,6 +13,7 @@
 #include "ArgumentParser.h"
 #include "Component.h"
 #include "FileUtils.h"
+#include "Notify.h"
 
 //-- STL --//
 #include <iostream>
@@ -27,7 +28,8 @@ namespace lre {
 	Settings::Settings(): recursive_(false), inputPath_(""),
 		outputPath_(""), pattern_("*.in"), removeExtension_(true),
 		keepStructure_(true), dataPath_(""), dataPattern_("*.lre"),
-		appendix_(""), appendixAfterLastSet_(true)
+		appendix_(""), appendixAfterLastSet_(true), verbose_(false),
+		silent_(false)
 	{
 	}
 
@@ -54,14 +56,26 @@ namespace lre {
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
 		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
+		ap.addCommandLineOption("--verbose or -V", "Enable verbose debug output");
+		ap.addCommandLineOption("--silent or -S", "Enable silent mode (no standard output, just errors). Overrides and disables verbose mode.");
 
-		if (ap.getArgumentCount() <= 1 || ap.isSet("--help") || ap.isSet("-h") || ap.isSet("/?") || ap.isSet("-?")) {
+		if (ap.isSet("--help") || ap.isSet("-h") || ap.isSet("/?") || ap.isSet("-?")) {
 			ap.reportOptions();
 			return 1;
 		}
-		
+
 		if (ap.isSet("--recursive") || ap.isSet("-R")) {
 			recursive_ = true;
+		}
+		
+		if (ap.isSet("--verbose") || ap.isSet("-V")) {
+			setVerbose(true);
+		}
+		
+		// Silent mode must be handled after verbose mode because silent mode
+		// overrides and disables verbose mode
+		if (ap.isSet("--silent") || ap.isSet("-S")) {
+			setSilent(true);
 		}
 
 		if (ap.isSet("--forgetSubfolders") || ap.isSet("-F")) {
@@ -95,16 +109,16 @@ namespace lre {
 	//=======================================================================================
 	void Settings::reportSetup()
 	{
-		std::cout<<"--- Lightweight Replace Engine: Setup ---"<<std::endl;
-		std::cout<<"Recurse directory: "<<recursive_<<std::endl;
-		std::cout<<"Remove extensions: "<<removeExtension_<<std::endl;
-		std::cout<<"Input path: "<<inputPath_<<std::endl;
-		std::cout<<"Input file pattern: "<<pattern_<<std::endl;
-		std::cout<<"Output directory: "<<outputPath_<<std::endl;
-		std::cout<<"Data path: "<<dataPath_<<std::endl;
-		std::cout<<"Data file pattern: "<<dataPattern_<<std::endl;
-		std::cout<<"Keep directory structure: "<<keepStructure_<<std::endl;
-		std::cout<<std::endl;
+		lre::notify(lre::NOTICE)<<"--- Lightweight Replace Engine: Setup ---"<<std::endl;
+		lre::notify(lre::NOTICE)<<"Recurse directory: "<<recursive_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Remove extensions: "<<removeExtension_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Input path: "<<inputPath_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Input file pattern: "<<pattern_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Output directory: "<<outputPath_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Data path: "<<dataPath_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Data file pattern: "<<dataPattern_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Keep directory structure: "<<keepStructure_<<std::endl;
+		lre::notify(lre::NOTICE)<<std::endl;
 	}
 
 } // namespace lre
