@@ -1,0 +1,8 @@
+SET(DATA_SINGLEFILE_FILES
+	${DATA_PATH}/data-singlefile/data.lre
+)
+
+INSTALL(
+	FILES        ${DATA_SINGLEFILE_FILES}
+	DESTINATION  ${DATA_INSTALLDIR}/data-singlefile
+)

@@ -1,0 +1,10 @@
+<LRE:COMPONENT:Users>
+	<LRE:SET>
+		<LRE:KEY:name>jos</LRE:KEY:name>
+		<LRE:KEY:password>abc123</LRE:KEY:password>
+	</LRE:SET>
+	<LRE:SET>
+		<LRE:KEY:name>mw</LRE:KEY:name>
+		<LRE:KEY:password>dummy</LRE:KEY:password>
+	</LRE:SET>
+</LRE:COMPONENT:Users>
