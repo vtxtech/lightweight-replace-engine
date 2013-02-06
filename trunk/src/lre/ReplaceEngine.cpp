@@ -209,7 +209,7 @@ namespace lre {
 			comp = keywordEnd+keywordSeparator+keywordComponent+keywordSeparator+componentName+keywordEndTag;
 			f = source.find(comp, pos);
 			if (f == std::string::npos) {
-				lre::notify(lre::ERROR)<<red<<"Missing '"<<comp<<"' for '"<<componentName<<"' at position "<<pos<<white<<std::endl;
+				lre::notify(lre::ERROR)<<red<<"Missing '"<<comp<<"' for '"<<componentName<<"' after position "<<pos<<white<<std::endl;
 				return false;
 			}
 			pos = f+comp.size();
