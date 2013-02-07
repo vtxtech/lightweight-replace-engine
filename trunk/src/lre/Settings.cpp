@@ -29,7 +29,7 @@ namespace lre {
 		outputPath_(""), pattern_("*.in"), removeExtension_(true),
 		keepStructure_(true), dataPath_(""), dataPattern_("*.lre"),
 		appendix_(""), appendixAfterLastSet_(true), verbose_(false),
-		silent_(false)
+		silent_(false), copyPattern_(""), copyFilesExcludingInputPattern_(true)
 	{
 	}
 
@@ -54,6 +54,8 @@ namespace lre {
 		ap.addCommandLineOption("--forgetSubfolders or -F", "Remove recursive directory structure in output directory. Disabled by default.");
 		ap.addCommandLineOption("--data <path or filename>", "Data file containg Components or path to multiple files matching --dataPattern <file_pattern>. Empty by default. Required option, if no data is defined in source code, only.");
 		ap.addCommandLineOption("--dataPattern <file_pattern>", "Sets the file pattern to match inside --data directory. Default is '*.lre'. Required option, if no data is defined in source code, only.");
+		ap.addCommandLineOption("--copyPattern <file_pattern>", "Sets the copy file pattern. Default is empty (disabled). If set, matching files from --input directory are copied to the appropriate --output location.");
+		ap.addCommandLineOption("--copyAll or -C", "Tells copy procedure to copy all files matching --dataPattern. Otherwise, by default, files matching --pattern are excluded.");
 		ap.addCommandLineOption("--appendix <string>", "Define a string (e.g. line break) that shall be appended after each generated set");
 		ap.addCommandLineOption("--noFinalAppendix", "Disable appendix string for the last set of a lre::Component");
 		ap.addCommandLineOption("--verbose or -V", "Enable verbose debug output");
@@ -90,11 +92,20 @@ namespace lre {
 			appendixAfterLastSet_ = false;
 		}
 
+		if (ap.isSet("--forgetSubfolders") || ap.isSet("-F")) {
+			keepStructure_ = false;
+		}
+
+		if (ap.isSet("--copyAll") || ap.isSet("-C")) {
+			copyFilesExcludingInputPattern_ = false;
+		}
+
 		ap.read("--pattern", pattern_);
 		ap.read("--input", inputPath_);
 		ap.read("--output", outputPath_);
 		ap.read("--data", dataPath_);
 		ap.read("--dataPattern", dataPattern_);
+		ap.read("--copyPattern", copyPattern_);
 		ap.read("--appendix", appendix_);
 
 		return ap.reportUnusedArguments();
@@ -117,6 +128,8 @@ namespace lre {
 		lre::notify(lre::NOTICE)<<"Output directory: "<<outputPath_<<std::endl;
 		lre::notify(lre::NOTICE)<<"Data path: "<<dataPath_<<std::endl;
 		lre::notify(lre::NOTICE)<<"Data file pattern: "<<dataPattern_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Copy file pattern: "<<copyPattern_<<std::endl;
+		lre::notify(lre::NOTICE)<<"Copy files excluding input pattern: "<<copyFilesExcludingInputPattern_<<std::endl;
 		lre::notify(lre::NOTICE)<<"Keep directory structure: "<<keepStructure_<<std::endl;
 		lre::notify(lre::NOTICE)<<std::endl;
 	}

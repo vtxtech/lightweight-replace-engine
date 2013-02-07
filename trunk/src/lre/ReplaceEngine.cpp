@@ -105,6 +105,27 @@ namespace lre {
 		std::vector<std::string> files;
 		files.clear();
 
+		// Copy files, if needed
+		if (settings().getCopyPattern() != "") {
+			lre::notify(lre::DEBUG)<<"Copy file lookup..."<<std::endl;
+			// Find all files matching --copyPattern
+			files = FileUtils::findFiles(settings().getInput(), settings().getCopyPattern(), settings().getRecursive());
+			// Remove all files matching --pattern (if the user did not disable that by adding --copyAll)
+			if (settings().getCopyFilesExcludingInputPattern()) {
+				files = FileUtils::filter(files, settings().getFilePattern(), false);
+			}
+			lre::notify(lre::DEBUG)<<std::endl;
+			lre::notify(lre::DEBUG)<<"--- Copying files matching copy pattern ---"<<std::endl;
+			for (unsigned int i = 0; i < files.size(); ++i) {
+				std::string targetFile = makeTargetFilename(files.at(i));
+				if (!FileUtils::copyFile(files.at(i), targetFile)) {
+					lre::notify(lre::ERROR)<<red<<"Failed copying '"<<files.at(i)<<"' to '"<<targetFile<<"'."<<std::endl<<"Aborting."<<white<<std::endl;
+					return FAILED_TO_PROCESS_FILE;
+				}
+			}
+		}
+
+		// Process files
 		lre::notify(lre::DEBUG)<<"Source file lookup..."<<std::endl;
 		files = FileUtils::findFiles(settings().getInput(), settings().getFilePattern(), settings().getRecursive());
 

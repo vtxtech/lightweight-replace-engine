@@ -63,6 +63,24 @@ namespace lre {
 			// @return Data files' pattern
 			std::string getDataPattern() const { return dataPattern_; }
 
+			// Sets the copy file pattern. Files matching the pattern copied as binary files
+			// @param pattern The copy file pattern (e.g. extension). Default is empty (disabled).
+			void setCopyPattern(const std::string& pattern) { copyPattern_ = pattern; }
+
+			// Getter for copy file pattern
+			// @return Returns file pattern for files to be copied in binary form
+			std::string getCopyPattern() const { return copyPattern_; }
+
+			// Sets the copy files processable file exclusion mode. Default is true.
+			// This option tells the copy files procedure to copy only files
+			// matching --copyPattern, but NOT MATCHING input pattern (--pattern)
+			// @param recurse Enable recursive handling of any files matching the extension inside the input directory
+			void setCopyFilesExcludingInputPattern(bool state) { copyFilesExcludingInputPattern_ = state; }
+
+			// Getter for copy files processable file exclusion mode.
+			// @return true, if processable files are to be skipped, otherwise false
+			bool getCopyFilesExcludingInputPattern() const { return copyFilesExcludingInputPattern_; }
+
 			// Sets the input path recursive mode. Only valid if setInput is set to a path. Default is false.
 			// @param recurse Enable recursive handling of any files matching the extension inside the input directory
 			void setRecursive(bool recurse) { recursive_ = recurse; }
@@ -136,12 +154,14 @@ namespace lre {
 			bool keepStructure_;
 			bool removeExtension_;
 			bool appendixAfterLastSet_;
+			bool copyFilesExcludingInputPattern_;
 			std::string inputPath_;
 			std::string outputPath_;
 			std::string pattern_;
 			std::string dataPath_;
 			std::string dataPattern_;
 			std::string appendix_;
+			std::string copyPattern_;
 	};
 
 } // namespace lre
