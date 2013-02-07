@@ -19,6 +19,8 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <string>
+#include <stdio.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <io.h>
@@ -124,7 +126,33 @@ namespace lre {
 	//=======================================================================================
 	bool FileUtils::copyFile(const std::string& source_filename, const std::string& target_filename)
 	{
-		return false;
+		std::ifstream initialFile(source_filename.c_str(), std::ios::in|std::ios::binary);
+		std::ofstream outputFile(target_filename.c_str(), std::ios::out|std::ios::binary);
+		//defines the size of the buffer
+		initialFile.seekg(0, std::ios::end);
+		std::istream::pos_type fileSize = initialFile.tellg();
+
+		if(initialFile.is_open() && outputFile.is_open()) {
+			std::istream::pos_type* buffer = new std::istream::pos_type[fileSize/2];
+			//Determine the file's size
+			initialFile.seekg(0, std::ios::beg);
+			//Then read enough of the file to fill the buffer
+			initialFile.read((char*)buffer, fileSize);
+			//And then write out all that was read
+			outputFile.write((char*)buffer, fileSize);
+			delete[] buffer;
+		} else if(!outputFile.is_open()) {
+			lre::notify(lre::ERROR)<<red<<"Failed to open "<<target_filename<<" for copying."<<white<<std::endl;
+			return false;
+		} else if(!initialFile.is_open()) {
+			lre::notify(lre::ERROR)<<red<<"Failed to open "<<source_filename<<" for copying."<<white<<std::endl;
+			return false;
+		}
+			
+		initialFile.close();
+		outputFile.close();
+
+		return true;
 	}
 	
 	//=======================================================================================
@@ -135,7 +163,7 @@ namespace lre {
 		temporaryFileList.clear();
 		// Add files matching/not matching pattern
 		for (unsigned int i = 0; i < list.size(); ++i) {
-			if (filterMatches == (wildcmp(pattern.c_str(), list.at(i).c_str()) == 0)) {
+			if (filterMatches != (wildcmp(pattern.c_str(), list.at(i).c_str()) == 0)) {
 				temporaryFileList.push_back(list.at(i));
 			}
 		}
