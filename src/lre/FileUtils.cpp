@@ -122,6 +122,28 @@ namespace lre {
 	}
 
 	//=======================================================================================
+	bool FileUtils::copyFile(const std::string& source_filename, const std::string& target_filename)
+	{
+		return false;
+	}
+	
+	//=======================================================================================
+	std::vector<std::string> FileUtils::filter(const std::vector<std::string>& list, const std::string& pattern, bool filterMatches)
+	{
+		// Temporary list
+		std::vector<std::string> temporaryFileList;
+		temporaryFileList.clear();
+		// Add files matching/not matching pattern
+		for (unsigned int i = 0; i < list.size(); ++i) {
+			if (filterMatches == (wildcmp(pattern.c_str(), list.at(i).c_str()) == 0)) {
+				temporaryFileList.push_back(list.at(i));
+			}
+		}
+		// Remember those files
+		return temporaryFileList;
+	}
+
+	//=======================================================================================
 	std::vector<std::string> FileUtils::findFiles(const std::string& path, const std::string& extension, bool recursive)
 	{
 		std::vector<std::string> files; files.clear();

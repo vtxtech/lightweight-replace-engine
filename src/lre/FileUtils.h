@@ -29,6 +29,7 @@ namespace lre {
 			static std::string includeTrailingSeparator(const std::string& filename);
 			static std::string getNativeEndline();
 			static std::string separator();
+			static std::vector<std::string> filter(const std::vector<std::string>& list, const std::string& pattern, bool filterMatches);
 
 			// File related utils
 			static bool makeDirectory(const std::string& path);
@@ -36,6 +37,7 @@ namespace lre {
 			static bool fileExists(const std::string& filename);
 			static std::string getFile(const std::string& filename);
 			static bool putFile(const std::string& filename, const std::string& text);
+			static bool copyFile(const std::string& source_filename, const std::string& target_filename);
 
 		private:
 			static std::vector<std::string> getDirectoryContent(const std::string& path);
