@@ -118,6 +118,11 @@ namespace lre {
 			lre::notify(lre::DEBUG)<<"--- Copying files matching copy pattern ---"<<std::endl;
 			for (unsigned int i = 0; i < files.size(); ++i) {
 				std::string targetFile = makeTargetFilename(files.at(i));
+				std::string targetDir = FileUtils::extractDirectory(targetFile);
+				if (!FileUtils::makeDirectory(targetDir)) {
+					lre::notify(lre::ERROR)<<red<<"Failed to created directory '"<<targetDir<<"."<<std::endl<<"Aborting."<<white<<std::endl;
+					return FAILED_TO_PROCESS_FILE;
+				}
 				if (!FileUtils::copyFile(files.at(i), targetFile)) {
 					lre::notify(lre::ERROR)<<red<<"Failed copying '"<<files.at(i)<<"' to '"<<targetFile<<"'."<<std::endl<<"Aborting."<<white<<std::endl;
 					return FAILED_TO_PROCESS_FILE;
