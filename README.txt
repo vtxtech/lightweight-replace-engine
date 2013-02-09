@@ -15,10 +15,11 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
-# Change Notes LRE v.1.0.1 upcoming bugfix release
+# Change Notes LRE v.1.1.0 upcoming developer release
 # --------------------------------------------------------
 #
-# * No changes, yet.
+# * Added arguments --copyPattern and --copyAll to copy files within the input
+#   directory matching a pattern without processing them.
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.1.0.0 (2013-02-06), Stable Release
