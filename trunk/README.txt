@@ -15,7 +15,7 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
-# Change Notes LRE v.1.1.0 upcoming developer release
+# Change Notes LRE v.1.1.0 (2013-03-10), Developer Release
 # --------------------------------------------------------
 #
 # * Added arguments --copyPattern and --copyAll to copy files within the input
