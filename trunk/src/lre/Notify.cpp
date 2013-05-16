@@ -61,19 +61,19 @@ namespace lre {
 		return s_NotifySettings;
 	};
 
-	void lre::setNotifyLevel(lre::NotifySeverity severity)
+	void setNotifyLevel(NotifySeverity severity)
 	{
 		getNotifySettings().notifyLevel_ = severity;
 	}
 
-	lre::NotifySeverity lre::getNotifyLevel()
+	NotifySeverity getNotifyLevel()
 	{
 		return getNotifySettings().notifyLevel_;
 	}
 
-	std::ostream& notify(const lre::NotifySeverity severity)
+	std::ostream& notify(const NotifySeverity severity)
 	{
-		if (severity == lre::ERROR) {
+		if (severity == ERROR) {
 			// Maybe we would like to use std::cerr instead of std::cout,
 			// so we create a placeholder
 			return std::cout; // std::cerr;
