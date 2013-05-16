@@ -15,10 +15,11 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
-# Change Notes LRE v.1.1.1 upcoming release
+# Change Notes LRE v.1.1.1, upcoming release
 # --------------------------------------------------------
 #
 # * Compiler support for Visual Studio 2010 x86
+# * Compiler support for GCC 4.7 x64
 #
 # -----------------------------------------------------------------------------
 # Change Notes LRE v.1.1.0 (2013-03-10), Developer Release
