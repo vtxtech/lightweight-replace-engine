@@ -15,7 +15,7 @@
 # For help on building see GETTING_STARTED.txt
 #
 # -----------------------------------------------------------------------------
-# Change Notes LRE v.1.1.1, upcoming release
+# Change Notes LRE v.1.2.0 (2013-05-16), Stable Release
 # --------------------------------------------------------
 #
 # * Compiler support for Visual Studio 2010 x86
