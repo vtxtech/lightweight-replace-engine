@@ -17,6 +17,10 @@ SET(LRE_PATCH_VERSION 1)
 
 SET(LRE_VERSION ${LRE_MAJOR_VERSION}.${LRE_MINOR_VERSION}.${LRE_PATCH_VERSION})
 
+IF(MSVC11 OR MSVC12 OR MSVC13)
+	ADD_DEFINITIONS(-D_VARIADIC_MAX=10)
+ENDIF(MSVC11 OR MSVC12 OR MSVC13)
+
 #######################################
 # Library files
 #######################################
