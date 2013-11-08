@@ -45,6 +45,7 @@
 # Supported (tested) compilers:
 #  * Windows: Visual Studio 2008 Express x86/x64
 #  * Windows: Visual Studio 2010 Express x86 (x64 untested, yet)
+#  * Windows: Visual Studio 2012 Express x86/x64
 #  * Linux: gcc 4.6 on Lubuntu 11.04, but LRE should compile on gcc 4.4 or
 #    higher, as well.
 #  * Linux: gcc 4.7 on Xubuntu 13.04
